@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "workspaces": [
-    "app/*"
+    "app/*",
+    "packages/*"
   ],
   "scripts": {
     "client": "cd ./app/client/; bun run dev",
