@@ -1,0 +1,21 @@
+{
+  "name": "watchparty",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "workspaces": [
+    "app/*"
+  ],
+  "scripts": {
+    "client": "cd ./app/client/; bun run dev",
+    "dev": "concurrently \"bun run server\" \"bun run client\"",
+    "server": "cd ./app/server/; bun run dev"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "concurrently": "^10.0.5"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}
