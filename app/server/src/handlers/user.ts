@@ -1,19 +1,36 @@
 import type { Request, Response } from "express";
 import type { DeleteUser, PostUser } from "@watchparty/shared/types";
-import { deleteUserProccess, registerUserProcess } from "../processes/user";
+import {
+    deleteUserProcess,
+    getUserProcess,
+    registerUserProcess,
+} from "../processes/user";
 
 export async function postUser(req: Request, res: Response) {
     const body = req.body as PostUser;
-    const [user, error] = await registerUserProcess(body);
-    if (error == null) {
-        console.log(user);
-        return res.status(201).json(user);
+    const result = await registerUserProcess(body);
+    if (result.ok) {
+        console.log(result.value);
+        return res.status(201).json(result.value);
     }
-    return res.status(error.code).json(error);
+    return res.status(result.error.code).json(result.error);
 }
 
 export async function getUser(req: Request, res: Response) {
-    return res.send("user");
+    let user = req.user;
+    if (!user) {
+        return res
+            .status(401)
+            .json({ success: false, message: "Unauthorized" });
+    }
+
+    let result = await getUserProcess({ username: user.username });
+
+    if (result.ok) {
+        return res.status(200).json(result.value);
+    }
+
+    return res.status(result.error.code).json(result.error);
 }
 
 export async function patchUser(req: Request, res: Response) {
@@ -22,10 +39,10 @@ export async function patchUser(req: Request, res: Response) {
 
 export async function deleteUser(req: Request, res: Response) {
     const body = req.body as DeleteUser;
-    let [data, error] = await deleteUserProccess(body);
+    let result = await deleteUserProcess(body);
 
-    if (error == null) {
-        return res.status(200).json(data);
+    if (result.ok) {
+        return res.status(200).json(result.value);
     }
-    return res.status(error.code).json(error);
+    return res.status(result.error.code).json(result.error);
 }

@@ -45,7 +45,7 @@ export const registerUserProcess = async (data: PostUser) => {
     }
 };
 
-export const deleteUserProccess = async (data: DeleteUser) => {
+export const deleteUserProcess = async (data: DeleteUser) => {
     const { username } = data;
     try {
         const user = await prisma.user.delete({ where: { username } });
@@ -69,6 +69,43 @@ export const deleteUserProccess = async (data: DeleteUser) => {
                         message: "Database error",
                     });
             }
+        }
+
+        // fallback for genuinely unexpected errors (non-Prisma)
+        return Err({
+            code: 500,
+            name: "InternalError",
+            error,
+            message: "Unexpected error",
+        });
+    }
+};
+
+export const getUserProcess = async (data: DeleteUser) => {
+    const { username } = data;
+    try {
+        const user = await prisma.user.findUnique({ where: { username } });
+
+        if (!user) {
+            return Err({
+                code: 404,
+                name: "NotFoundError",
+                message: "User not found",
+                error: null,
+            });
+        }
+
+        let { password: _, ...userWithoutPassword } = user;
+        return Ok(userWithoutPassword);
+    } catch (error) {
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            return Err({
+                code: 500,
+                name: "InternalError",
+
+                error,
+                message: "Database error",
+            });
         }
 
         // fallback for genuinely unexpected errors (non-Prisma)
