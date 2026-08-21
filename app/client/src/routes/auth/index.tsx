@@ -64,5 +64,3 @@ function RouteComponent() {
     </div>
   );
 }
-
-export default RouteComponent;

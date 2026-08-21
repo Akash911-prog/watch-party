@@ -6,23 +6,38 @@ import tseslint from 'typescript-eslint';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
-    globalIgnores(['dist']),
-    {
-        files: ['**/*.{ts,tsx}'],
-        extends: [
-            js.configs.recommended,
-            tseslint.configs.recommended,
-            reactHooks.configs.flat.recommended,
-            reactRefresh.configs.vite,
-        ],
-        languageOptions: {
-            globals: globals.browser,
-        },
+  globalIgnores(['dist']),
+  {
+    files: ['**/*.{ts,tsx}'],
+    extends: [
+      js.configs.recommended,
+      tseslint.configs.recommended,
+      reactHooks.configs.flat.recommended,
+      reactRefresh.configs.vite,
+    ],
+    languageOptions: {
+      globals: globals.browser,
     },
-    {
-        files: ['src/routes/**/*.{ts,tsx}'],
-        rules: {
-            'react-refresh/only-export-components': 'off',
-        },
+  },
+  {
+    files: ['src/routes/**/*.{ts,tsx}'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
     },
+  },
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    rules: {
+      'no-unused-vars': 'off',
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+        },
+      ],
+    },
+  },
 ]);
