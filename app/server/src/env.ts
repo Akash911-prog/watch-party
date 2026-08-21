@@ -9,6 +9,7 @@ const envSchema = z.object({
     PORT: z.coerce.number().default(3000),
     DATABASE_URL: z.url(),
     CA_CERTIFICATE: z.string(),
+    JWT_SECRET: z.string(),
 });
 
 // Validate once, at startup

@@ -4,6 +4,7 @@ import helmet from "helmet";
 import cors from "cors";
 import userRouter from "./routes/user";
 import { env } from "./env";
+import authRouter from "./routes/auth";
 
 const app: Express = express();
 const port = env.PORT;
@@ -31,6 +32,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/user", userRouter);
+app.use("/auth", authRouter);
 
 app.listen(port, () => {
     console.log(` ✅ server started in ${env.NODE_ENV} mode on port ${port}`);

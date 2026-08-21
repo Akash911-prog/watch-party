@@ -1,9 +1,9 @@
-import router from "express";
+import { Router } from "express";
 import { validate } from "../middleware/validate";
 import { deleteUserSchema, postUserSchema } from "@watchparty/shared/schemas";
 import { deleteUser, getUser, patchUser, postUser } from "../handlers/user";
 
-const userRouter = router();
+const userRouter = Router();
 
 userRouter.post("/", validate(postUserSchema), postUser);
 
