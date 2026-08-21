@@ -10,6 +10,7 @@ const envSchema = z.object({
     DATABASE_URL: z.url(),
     CA_CERTIFICATE: z.string(),
     JWT_SECRET: z.string(),
+    COOKIE_SECRET: z.string(),
 });
 
 // Validate once, at startup

@@ -5,6 +5,7 @@ import cors from "cors";
 import userRouter from "./routes/user";
 import { env } from "./env";
 import authRouter from "./routes/auth";
+import cookieParser from "cookie-parser";
 
 const app: Express = express();
 const port = env.PORT;
@@ -26,6 +27,7 @@ app.use(
 app.use(express.json({ limit: "10kb" }));
 app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(limiter);
+app.use(cookieParser(env.COOKIE_SECRET));
 
 app.get("/", (req: Request, res: Response) => {
     res.send("Hello World!");

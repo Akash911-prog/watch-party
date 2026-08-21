@@ -15,15 +15,22 @@ export type AppError = {
         message: string;
         error: any;
         stack?: string;
+        success?: false;
     };
 }[keyof ErrorMap];
 
-// 3. Result type now uses AppError instead of the generic Error
-export type Result<S, E extends AppError = AppError> = [S, null] | [null, E];
+export type Result<S, E extends AppError = AppError> =
+    | { ok: true; value: S; error: null }
+    | { ok: false; value: null; error: E };
 
-export const Ok = <T>(value: T): Result<T, never> => [value, null];
+export const Ok = <T>(value: T): Result<T, never> => ({
+    ok: true,
+    value,
+    error: null,
+});
 
-export const Err = <E extends AppError>(error: E): Result<never, E> => [
-    null,
+export const Err = <E extends AppError>(error: E): Result<never, E> => ({
+    ok: false,
+    value: null,
     error,
-];
+});
