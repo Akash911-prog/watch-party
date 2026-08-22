@@ -1,10 +1,10 @@
 import { Prisma } from "../generated/prisma/client"; // or wherever your client is generated
-import type { DeleteUser, PostUser } from "@watchparty/shared/types";
+import type { UsernameQuery, CreateUser } from "@watchparty/shared/types";
 import { Err, Ok } from "@watchparty/shared/errors";
 import bcrypt from "bcrypt";
 import { prisma } from "../prisma";
 
-export const registerUserProcess = async (data: PostUser) => {
+export const registerUserProcess = async (data: CreateUser) => {
     const { username, password } = data;
     const hash = await bcrypt.hash(password, 12);
 
@@ -45,7 +45,7 @@ export const registerUserProcess = async (data: PostUser) => {
     }
 };
 
-export const deleteUserProcess = async (data: DeleteUser) => {
+export const deleteUserProcess = async (data: UsernameQuery) => {
     const { username } = data;
     try {
         const user = await prisma.user.delete({ where: { username } });
@@ -81,7 +81,7 @@ export const deleteUserProcess = async (data: DeleteUser) => {
     }
 };
 
-export const getUserProcess = async (data: DeleteUser) => {
+export const getUserProcess = async (data: UsernameQuery) => {
     const { username } = data;
     try {
         const user = await prisma.user.findUnique({ where: { username } });

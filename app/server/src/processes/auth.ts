@@ -1,4 +1,4 @@
-import type { PostUser } from "@watchparty/shared/types";
+import type { PostUser, UserPayload } from "@watchparty/shared/types";
 import { prisma } from "../prisma";
 import { Prisma } from "../generated/prisma/client";
 import { Err, Ok, type AppError, type Result } from "@watchparty/shared/errors";
@@ -77,10 +77,7 @@ export const verifyToken = (token: string) => {
     }
 
     try {
-        const payload = jwt.verify(token, env.JWT_SECRET) as {
-            username: string;
-            id: string;
-        };
+        const payload = jwt.verify(token, env.JWT_SECRET) as UserPayload;
 
         return Ok(payload);
     } catch (error) {

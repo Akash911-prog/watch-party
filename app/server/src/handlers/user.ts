@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import type { DeleteUser, PostUser } from "@watchparty/shared/types";
+import type { UsernameQuery, CreateUser } from "@watchparty/shared/types";
 import {
     deleteUserProcess,
     getUserProcess,
@@ -7,7 +7,7 @@ import {
 } from "../processes/user";
 
 export async function postUser(req: Request, res: Response) {
-    const body = req.body as PostUser;
+    const body = req.body as CreateUser;
     const result = await registerUserProcess(body);
     if (result.ok) {
         console.log(result.value);
@@ -38,7 +38,7 @@ export async function patchUser(req: Request, res: Response) {
 }
 
 export async function deleteUser(req: Request, res: Response) {
-    const body = req.body as DeleteUser;
+    const body = req.body as UsernameQuery;
     let result = await deleteUserProcess(body);
 
     if (result.ok) {
