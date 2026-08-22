@@ -23,7 +23,7 @@ export const signupFormSchema = loginFormSchema
     });
 
 // --- request envelope helper, replaces repeated body/query/params boilerplate ---
-const requestSchema = <B extends z.ZodTypeAny>(body: B) =>
+export const requestSchema = <B extends z.ZodTypeAny>(body: B) =>
     z.object({
         body,
         query: z.object({}).optional(),

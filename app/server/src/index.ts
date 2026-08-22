@@ -6,6 +6,7 @@ import userRouter from "./routes/user";
 import { env } from "./env";
 import authRouter from "./routes/auth";
 import cookieParser from "cookie-parser";
+import videoRouter from "./routes/video";
 
 const app: Express = express();
 const port = env.PORT;
@@ -36,6 +37,7 @@ app.get("/health", async (req, res) => res.status(200).json({}));
 
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
+app.use("/video", videoRouter);
 
 app.listen(port, () => {
     console.log(` ✅ server started in ${env.NODE_ENV} mode on port ${port}`);

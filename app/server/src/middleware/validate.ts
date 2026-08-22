@@ -13,7 +13,7 @@ export const validate =
         if (!result.success) {
             return res.status(400).json({
                 error: "Validation failed",
-                details: treeifyError(result.error).errors,
+                details: treeifyError(result.error),
             });
         }
 

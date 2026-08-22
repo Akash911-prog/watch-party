@@ -8,9 +8,9 @@
     "packages/*"
   ],
   "scripts": {
-    "client": "cd ./app/client/; bun run dev",
-    "dev": "concurrently -n \"server,client\" -c \"blue,green\" \"bun run server\" \"bun run client\"",
-    "server": "cd ./app/server/; bun run dev"
+    "dev:client": "cd ./app/client/; bun run dev",
+    "dev": "concurrently -n \"server,client\" -c \"blue,green\" \"bun run dev:server\" \"bun run dev:client\"",
+    "dev:server": "bun --watch ./app/server/src/index.ts"
   },
   "devDependencies": {
     "@types/bun": "latest",

@@ -5,6 +5,10 @@ interface ErrorMap {
     ForbiddenError: 403;
     InternalError: 500;
     ConflictError: 409;
+    BadGatewayError: 502;
+    GatewayTimeoutError: 504;
+    ServiceUnavailableError: 503;
+    TooManyRequestsError: 429;
 }
 
 // 2. Build the discriminated union from the map
