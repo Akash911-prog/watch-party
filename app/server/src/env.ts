@@ -11,6 +11,10 @@ const envSchema = z.object({
     CA_CERTIFICATE: z.string(),
     JWT_SECRET: z.string(),
     COOKIE_SECRET: z.string(),
+    GOOGLE_CLIENT_ID: z.string(),
+    GOOGLE_CLIENT_SECRET: z.string(),
+    GOOGLE_REDIRECT_URI: z.string(),
+    YT_REFRESH_TOKEN: z.string(),
 });
 
 // Validate once, at startup

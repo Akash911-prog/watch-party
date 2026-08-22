@@ -29,9 +29,10 @@ app.use(express.urlencoded({ extended: true, limit: "10kb" }));
 app.use(limiter);
 app.use(cookieParser(env.COOKIE_SECRET));
 
-app.get("/", (req: Request, res: Response) => {
+app.get("/", async (req, res) => {
     res.send("Hello World!");
 });
+app.get("/health", async (req, res) => res.status(200).json({}));
 
 app.use("/user", userRouter);
 app.use("/auth", authRouter);

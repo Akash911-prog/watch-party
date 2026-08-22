@@ -13,8 +13,32 @@ datasource db {
 }
 
 model User {
-  id        String   @unique @default(uuid())
+  id        String   @id @default(cuid())
   username  String   @unique
   password  String
   createdAt DateTime @default(now())
+  videos    Video[]
+  rooms     Room[]
+}
+
+model Room {
+  id        String   @id @default(cuid())
+  videoId   String   @unique
+  video     Video    @relation(fields: [videoId], references: [id], onDelete: Cascade)
+  hostId    String
+  host      User     @relation(fields: [hostId], references: [id])
+  createdAt DateTime @default(now())
+}
+
+model Video {
+  id         String   @id @default(cuid())
+  youtubeId  String   @unique
+  title      String
+  uploadedBy String
+  createdAt  DateTime @default(now())
+  expiresAt  DateTime
+  rooms      Room?
+  user       User     @relation(fields: [uploadedBy], references: [id])
+
+  @@index([expiresAt])
 }
