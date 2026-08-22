@@ -8,7 +8,7 @@ import {
   type SignupFormValues,
 } from '@watchparty/shared/schemas';
 import type { User } from '@watchparty/shared/types';
-import { api } from '@/api-client';
+import { api } from '@/lib/api-client';
 
 const SignupForm = () => {
   const {

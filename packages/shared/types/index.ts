@@ -17,3 +17,5 @@ export interface User {
     username: string;
     createdAt: Date;
 }
+
+export * from "./room-events";
