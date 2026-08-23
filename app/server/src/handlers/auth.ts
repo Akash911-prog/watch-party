@@ -27,3 +27,15 @@ export async function logout(req: Request, res: Response) {
     res.clearCookie("login");
     return res.status(200).json({});
 }
+
+export async function verify(req: Request, res: Response) {
+    let user = req.user;
+
+    if (!user) {
+        return res
+            .status(401)
+            .json({ success: false, message: "Unauthorized" });
+    }
+
+    return res.status(200).json({ user });
+}

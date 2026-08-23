@@ -4,7 +4,7 @@ import './index.css';
 import { getRouter } from './router.tsx';
 import { RouterProvider } from '@tanstack/react-router';
 
-const router = getRouter();
+const router = await getRouter();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

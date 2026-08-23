@@ -12,6 +12,7 @@ import { api } from '@/lib/api-client';
 import { toast } from 'sonner';
 import { ApiError } from '@/lib/api-client/api-client';
 import { useNavigate } from '@tanstack/react-router';
+import { useAuthStore } from '@/hooks/useAuth';
 
 const SignupForm = () => {
   const {
@@ -28,6 +29,7 @@ const SignupForm = () => {
   });
 
   const navigate = useNavigate();
+  const authStore = useAuthStore();
 
   const onSubmit = async (data: SignupFormValues) => {
     const { confirmPassword: _, ...reqBody } = data;
@@ -50,6 +52,7 @@ const SignupForm = () => {
       username: user.username,
       password: data.password,
     });
+    authStore.setUser(user);
     navigate({ to: '/' });
   };
 

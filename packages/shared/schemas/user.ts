@@ -40,7 +40,7 @@ export const userPayloadSchema = z.object({
     id: z.string(),
     username: usernameSchema,
 });
-export const userSchema = userPayloadSchema.extend({ createdAt: z.date() });
+export const userSchema = userPayloadSchema;
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;
 export type SignupFormValues = z.infer<typeof signupFormSchema>;

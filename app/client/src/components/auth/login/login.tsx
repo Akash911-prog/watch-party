@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { useAuthStore } from '@/hooks/useAuth';
 import { api } from '@/lib/api-client';
 import type { ApiError } from '@/lib/api-client/api-client';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -9,6 +10,7 @@ import {
   loginFormSchema,
   type LoginFormValues,
 } from '@watchparty/shared/schemas';
+import type { User } from '@watchparty/shared/types';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 
@@ -26,6 +28,7 @@ const LoginForm = () => {
   });
 
   const navigate = useNavigate();
+  const authStore = useAuthStore();
 
   const onSubmit = (data: LoginFormValues) => {
     toast.promise(() => login(data), {
@@ -42,6 +45,8 @@ const LoginForm = () => {
 
   const login = async (data: LoginFormValues) => {
     await api.post('/auth/login', data);
+    const user = await api.get<User>('/auth/verify');
+    authStore.setUser(user);
     navigate({ to: '/' });
   };
 

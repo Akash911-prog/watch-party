@@ -5,6 +5,10 @@ import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
 
 export const Route = createFileRoute('/auth/')({
+  beforeLoad: ({ context }) => {
+    console.log(context);
+    if (context.isAuthenticated) throw Route.redirect({ to: '/' });
+  },
   component: RouteComponent,
 });
 
