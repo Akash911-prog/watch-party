@@ -7,8 +7,11 @@ import {
   signupFormSchema,
   type SignupFormValues,
 } from '@watchparty/shared/schemas';
-import type { User } from '@watchparty/shared/types';
+import type { CreateUser, User } from '@watchparty/shared/types';
 import { api } from '@/lib/api-client';
+import { toast } from 'sonner';
+import { ApiError } from '@/lib/api-client/api-client';
+import { useNavigate } from '@tanstack/react-router';
 
 const SignupForm = () => {
   const {
@@ -24,15 +27,30 @@ const SignupForm = () => {
     resolver: zodResolver(signupFormSchema),
   });
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data: SignupFormValues) => {
     const { confirmPassword: _, ...reqBody } = data;
-    try {
-      // TODO: Add toasts
-      const newUser = await api.post<User>('/user', reqBody);
-      console.log(newUser);
-    } catch (error) {
-      console.error(error);
-    }
+    toast.promise(() => signup(reqBody), {
+      loading: 'Signing up...',
+      success: 'Signed up successfully',
+      error: (err: ApiError) => {
+        if (err.status === 409) {
+          return err.data?.message;
+        }
+        return 'Something went wrong';
+      },
+    });
+  };
+
+  const signup = async (data: CreateUser) => {
+    const user = await api.post<User>('/user', data);
+    console.log(user);
+    await api.post('/auth/login', {
+      username: user.username,
+      password: data.password,
+    });
+    navigate({ to: '/' });
   };
 
   return (

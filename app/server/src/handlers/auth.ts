@@ -1,10 +1,10 @@
-import type { PostUser } from "@watchparty/shared/types";
+import type { CreateUser } from "@watchparty/shared/types";
 import type { Request, Response } from "express";
 import { loginProcess } from "../processes/auth";
 import { env } from "../env";
 
 export async function login(req: Request, res: Response) {
-    let data = req.body as PostUser;
+    let data = req.body as CreateUser;
 
     let result = await loginProcess(data);
     let { value: token } = result;
@@ -20,7 +20,7 @@ export async function login(req: Request, res: Response) {
         maxAge: 1000 * 60 * 60 * 24 * 7,
     });
 
-    return res.status(200).json(token);
+    return res.status(200).json({ token });
 }
 
 export async function logout(req: Request, res: Response) {

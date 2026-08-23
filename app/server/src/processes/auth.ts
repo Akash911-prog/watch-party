@@ -1,4 +1,4 @@
-import type { PostUser, UserPayload } from "@watchparty/shared/types";
+import type { CreateUser, UserPayload } from "@watchparty/shared/types";
 import { prisma } from "../prisma";
 import { Prisma } from "../generated/prisma/client";
 import { Err, Ok, type AppError, type Result } from "@watchparty/shared/errors";
@@ -6,7 +6,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { env } from "../env";
 
-export const loginProcess = async (data: PostUser) => {
+export const loginProcess = async (data: CreateUser) => {
     let { username, password } = data;
 
     try {

@@ -23,7 +23,7 @@ export const registerUserProcess = async (data: CreateUser) => {
                         code: 409,
                         name: "ConflictError",
                         error,
-                        message: "User already exists",
+                        message: "Username already exists",
                     });
                 default:
                     return Err({

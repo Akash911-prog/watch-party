@@ -1,3 +1,5 @@
+import type { AppError } from '@watchparty/shared/errors';
+
 type Method = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 
 interface RequestConfig extends Omit<
@@ -19,9 +21,9 @@ interface ApiClientConfig {
 export class ApiError extends Error {
   status: number;
   statusText: string;
-  data: unknown;
+  data: AppError | null;
 
-  constructor(status: number, statusText: string, data: unknown) {
+  constructor(status: number, statusText: string, data: AppError | null) {
     super(`Request failed with status ${status}`);
     this.name = 'ApiError';
     this.status = status;
@@ -131,7 +133,7 @@ class ApiClient {
       }
 
       if (!response.ok) {
-        const errorData = await this.safeParse(response);
+        const errorData = (await this.safeParse(response)) as AppError;
         throw new ApiError(response.status, response.statusText, errorData);
       }
 
