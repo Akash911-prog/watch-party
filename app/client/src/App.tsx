@@ -1,12 +1,17 @@
-import { Input } from './components/ui/input';
-import { Label } from './components/ui/label';
+import Navbar from './components/navbar';
 
 function App() {
   return (
-    <>
-      <Label>Name</Label>
-      <Input />
-    </>
+    <main>
+      <nav className="navbar sticky">
+        <Navbar />
+      </nav>
+      <section className="hero"></section>
+      <section className="about"></section>
+      <section className="features"></section>
+      <section className="cta"></section>
+      <footer></footer>
+    </main>
   );
 }
 
