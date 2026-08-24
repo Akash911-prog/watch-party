@@ -13,7 +13,7 @@ const Navbar = () => {
         isOpen={isOpen}
         onNavigate={() => setIsOpen(!isOpen)}
       />
-      <div className="w-screen overflow-clip grid md:grid-cols-3 grid-cols-2 px-15 pt-4">
+      <div className="w-screen overflow-clip grid md:grid-cols-3 grid-cols-2 md:px-15 px-5 pt-4">
         <div
           className={`logo text-md pt-0.5 z-50 ${isOpen ? 'text-black' : 'text-white'} transition-all duration-200 ease-in-out`}
         >
