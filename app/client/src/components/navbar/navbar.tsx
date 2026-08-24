@@ -7,13 +7,13 @@ const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
-    <div className="relative">
+    <div className="relative backdrop-blur-xs h-16.25">
       <HamburgerMenu
         className={`md:hidden z-10`}
         isOpen={isOpen}
         onNavigate={() => setIsOpen(!isOpen)}
       />
-      <div className="w-screen overflow-clip grid md:grid-cols-3 grid-cols-2 px-5 pt-4">
+      <div className="w-screen overflow-clip grid md:grid-cols-3 grid-cols-2 px-15 pt-4">
         <div
           className={`logo text-md pt-0.5 z-50 ${isOpen ? 'text-black' : 'text-white'} transition-all duration-200 ease-in-out`}
         >
@@ -39,7 +39,7 @@ const Navbar = () => {
           isActive={isOpen}
           onClick={() => setIsOpen(!isOpen)}
           size={38}
-          className={`justify-self-end z-50 transition-all duration-200 ease-in-out`}
+          className={`justify-self-end z-50 transition-all duration-200 ease-in-out md:hidden`}
           strokeColor={isOpen ? '#000000' : '#ffffff'}
         />
       </div>
