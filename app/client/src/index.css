@@ -145,15 +145,9 @@ body {
   }
 }
 
-/*
-Source - https://stackoverflow.com/a/30680994
-Posted by Anirban Bhui, modified by community. See post 'Timeline' for change history
-Retrieved 2026-08-25, License - CC BY-SA 4.0
-*/
-
 html {
-  overflow: scroll;
-  overflow-x: hidden;
+  scroll-behavior: smooth;
+  /* overflow-x: hidden; */
 }
 
 ::-webkit-scrollbar {
@@ -167,7 +161,6 @@ html {
 ::-webkit-scrollbar-thumb {
   background: #FF0000;
 }
-
 
 body {
   height: 100vh;
