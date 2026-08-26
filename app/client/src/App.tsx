@@ -1,14 +1,9 @@
 import Navbar from './components/navbar';
 import HeroImg from './assets/hero/3.jpg';
 import { Link } from '@tanstack/react-router';
-import {
-  motion,
-  stagger,
-  useScroll,
-  useSpring,
-  useTransform,
-} from 'motion/react';
+import { motion, useScroll, useSpring, useTransform } from 'motion/react';
 import { useRef } from 'react';
+import bgImage from './assets/hero/1.jpg';
 
 // direction each box enters from, keyed to visual position
 const boxVariants = {
@@ -84,8 +79,12 @@ function App() {
     target: shrinkRef,
     offset: ['start start', 'end end'],
   });
-  const scale = useTransform(shrinkProgress, [0, 1], [1, 0.95]);
-  const y = useTransform(shrinkProgress, [0, 1], ['0%', '-85%']);
+  // shrink completes within the first 40% of the wrapper's scroll room,
+  // then cta just sits pinned-small while footer scrolls normally beneath
+  const shrinkPhase = useTransform(shrinkProgress, [0, 0.4], [0, 1]);
+  const movePhase = useTransform(shrinkProgress, [0, 1], [0, 1]);
+  const scale = useTransform(shrinkPhase, [0, 1], [1, 0.94]);
+  const y = useTransform(movePhase, [0, 1], ['0%', '-85%']);
 
   return (
     <main className="app relative">
@@ -166,30 +165,43 @@ function App() {
               <motion.div
                 custom="left"
                 variants={boxVariants}
-                className="bg-neutral-700 col-span-2 md:col-span-1"
-              />
+                className="bg-neutral-700 col-span-2 md:col-span-1 relative"
+              >
+                <span className="text-lg font-semibold absolute bottom-5 left-5 text-neutral-300">
+                  Create Room
+                </span>
+              </motion.div>
               <motion.div
                 custom="right"
                 variants={boxVariants}
-                className="bg-neutral-700 md:row-span-2"
-              />
+                className="bg-neutral-700 md:row-span-2 relative"
+              >
+                <span className="text-lg font-semibold absolute bottom-10 left-5 text-neutral-300">
+                  Press Play Together
+                </span>
+              </motion.div>
               <motion.div
                 custom="down"
                 variants={boxVariants}
-                className="bg-neutral-700"
-              />
+                className="bg-neutral-700 relative"
+              >
+                <span className="text-lg font-semibold absolute bottom-10 left-5 text-neutral-300">
+                  Invite Friends
+                </span>
+              </motion.div>
             </motion.div>
           </div>
         </motion.section>
       </div>
 
+      {/* features section */}
       <section className="features h-screen">
         <div className="w-fit mx-auto mt-8 flex gap-2 items-center">
           <span className="block size-4 rounded-full bg-white"></span>
           <span className="text-lg">WHY US?</span>
         </div>
         <motion.div
-          className="grid md:grid-cols-4 grid-cols-2 grid-rows-2 h-[90%] md:gap-2.75 gap-1.25 md:mx-10 mx-2 mt-10"
+          className="grid md:grid-cols-4 grid-cols-2 grid-rows-2 h-[85%] md:gap-2.75 gap-1.25 md:mx-10 mx-2 mt-10"
           variants={gridContainerVariants}
           initial="hidden"
           whileInView="visible"
@@ -198,8 +210,21 @@ function App() {
           <motion.div
             custom="left"
             variants={boxVariants}
-            className="bg-neutral-700 md:col-span-2 md:row-span-2"
-          />
+            className="relative bg-neutral-700 md:col-span-2 md:row-span-2 overflow-hidden group z-0"
+          >
+            <img
+              src={bgImage}
+              alt="real time sync"
+              className="absolute inset-0 object-cover w-full h-full group-active:w-[120%] group-active:h-[120%] group-hover:w-[120%] group-hover:h-[120%] transition-all duration-300 z-10"
+            />
+            <span className="md:text-xl font-semibold absolute md:bottom-5 md:left-5 bottom-2 left-2 text-neutral-300 group-hover:-translate-y-10 transition-all duration-300 z-30 group-active:-translate-y-10">
+              Real Time Sync
+            </span>
+            <p className="text-neutral-500 md:text-md text-[10px] absolute -bottom-10 md:left-5 left-2 opacity-0 group-hover:opacity-100 group-hover:bottom-0 group-active:opacity-100 group-active:bottom-0 z-30 transition-all duration-300">
+              Lorem ipsum, dolor sit amet consectetur adipisicing elit. Modi
+              reprehenderit tempora sunt.
+            </p>
+          </motion.div>
           <motion.div
             custom="right"
             variants={boxVariants}
@@ -218,7 +243,7 @@ function App() {
         </motion.div>
       </section>
 
-      <div className="relative h-[200vh] bg-white" ref={shrinkRef}>
+      <div className="relative bg-white" ref={shrinkRef}>
         <motion.section
           className="cta h-screen sticky top-0 overflow-hidden z-50 bg-black"
           style={{ scale, y }}
@@ -254,7 +279,140 @@ function App() {
             </motion.button>
           </motion.div>
         </motion.section>
-        <footer className="absolute w-full h-screen bg-white -z-[999]"></footer>
+
+        <footer className="sticky bottom-0 w-full bg-white text-black h-[80%]">
+          <div className="max-w-[1800px] mx-auto px-6 md:px-10 pt-16 pb-6">
+            {/* logo */}
+            <div className="mb-16">
+              <svg viewBox="0 0 40 40" className="h-9 w-9" fill="currentColor">
+                <path d="M20 4 L34 34 L20 26 L6 34 Z" />
+              </svg>
+            </div>
+
+            {/* info columns */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-y-10 gap-x-6 pb-20 border-b border-black/10">
+              <div>
+                <p className="text-xs tracking-widest text-neutral-500 mb-4">
+                  INFOS
+                </p>
+                <p className="text-sm mb-1">Delhi, India</p>
+                <p className="text-sm mb-1">contact@yourprod.com</p>
+                <p className="text-sm">+91 00000 00000</p>
+              </div>
+
+              <div>
+                <p className="text-xs tracking-widest text-neutral-500 mb-4">
+                  PAGES
+                </p>
+                <ul className="space-y-1.5 text-sm text-neutral-500">
+                  <li>
+                    <a href="#" className="hover:text-black transition-colors">
+                      Home
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-black transition-colors">
+                      Work
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-black transition-colors">
+                      Archive
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-black transition-colors">
+                      About
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-black transition-colors">
+                      Contact
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-xs tracking-widest text-neutral-500 mb-4">
+                  SOCIALS
+                </p>
+                <ul className="space-y-1.5 text-sm text-neutral-500">
+                  <li>
+                    <a href="#" className="hover:text-black transition-colors">
+                      Instagram
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="hover:text-black transition-colors">
+                      LinkedIn
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-xs tracking-widest text-neutral-500 mb-4">
+                  LEGALS
+                </p>
+                <ul className="space-y-1.5 text-sm text-neutral-500">
+                  <li>
+                    <a href="#" className="hover:text-black transition-colors">
+                      Terms
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+              <div className="col-span-2 md:col-span-1 md:text-right self-end">
+                <p className="text-xs tracking-widest text-neutral-500">
+                  DESIGNED &amp; DEVELOPED BY{' '}
+                  <a href="#" className="underline text-black">
+                    Akash Samanta
+                  </a>
+                </p>
+              </div>
+            </div>
+
+            {/* big image-clipped wordmark */}
+            {/* big image-clipped wordmark */}
+            <div className="relative pt-10 pb-2 select-none overflow-hidden">
+              <svg
+                viewBox="0 0 1000 180"
+                className="w-full h-auto"
+                preserveAspectRatio="none"
+              >
+                <defs>
+                  <pattern
+                    id="wordmarkFill"
+                    patternUnits="objectBoundingBox"
+                    width="1"
+                    height="1"
+                  >
+                    <image
+                      href={bgImage}
+                      x="0"
+                      y="0"
+                      width="1000"
+                      height="180"
+                      preserveAspectRatio="xMidYMid slice"
+                    />
+                  </pattern>
+                </defs>
+                <text
+                  x="0"
+                  y="150"
+                  textLength="1000"
+                  lengthAdjust="spacingAndGlyphs"
+                  className="font-bold"
+                  style={{ fontSize: '180px', fill: 'url(#wordmarkFill)' }}
+                >
+                  SHOWTIME
+                </text>
+              </svg>
+            </div>
+          </div>
+        </footer>
       </div>
     </main>
   );
