@@ -56,7 +56,7 @@ const Navbar = () => {
               />
               <Link
                 to="/dashboard"
-                className="group-hover:text-neutral-300 group-hover:tracking-tighter flex"
+                className="group-hover:text-neutral-300 flex"
               >
                 <motion.div
                   className="flex"
@@ -84,7 +84,7 @@ const Navbar = () => {
               />
               <Link
                 to="/dashboard"
-                className="group-hover:text-neutral-300 group-hover:tracking-tighter flex"
+                className="group-hover:text-neutral-300  flex"
               >
                 <motion.div
                   className="flex"
@@ -112,7 +112,7 @@ const Navbar = () => {
               />
               <Link
                 to="/dashboard"
-                className="group-hover:text-neutral-300 group-hover:tracking-tighter flex"
+                className="group-hover:text-neutral-300 flex"
               >
                 <motion.div
                   className="flex"
