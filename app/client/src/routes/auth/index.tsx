@@ -3,8 +3,14 @@ import LoginForm from '@/components/auth/login';
 import SignupForm from '@/components/auth/signup';
 import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
+import { z } from 'zod';
+
+const authSchema = z.object({
+  signup: z.boolean().optional(),
+});
 
 export const Route = createFileRoute('/auth/')({
+  validateSearch: (search) => authSchema.parse(search),
   beforeLoad: ({ context }) => {
     console.log(context);
     if (context.isAuthenticated) throw Route.redirect({ to: '/' });
@@ -13,12 +19,13 @@ export const Route = createFileRoute('/auth/')({
 });
 
 function RouteComponent() {
-  const [isLogin, setIsLogin] = useState(true);
+  const { signup } = Route.useSearch();
+  const [isLogin, setIsLogin] = useState<boolean>(!signup);
 
   return (
     <div className="relative w-full max-w-sm mx-auto top-1/2 translate-y-1/2 perspective-distant">
       <div
-        className="relative w-full transition-transform duration-500 transform-3d"
+        className={`relative w-full transition-transform duration-500 transform-3d`}
         style={{ transform: isLogin ? 'rotateY(0deg)' : 'rotateY(180deg)' }}
       >
         {/* Front — Login */}

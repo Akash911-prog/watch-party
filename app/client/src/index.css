@@ -167,3 +167,19 @@ body {
   width: 100vw;
   overflow-x: hidden;
 }
+
+@keyframes spin-in {
+  from {
+    transform: rotateY(0deg);
+  }
+
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+
+
+.animate-spin-in {
+  animation: spin-in 0.8s ease-out;
+}

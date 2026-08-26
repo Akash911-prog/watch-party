@@ -2,9 +2,30 @@ import { Link } from '@tanstack/react-router';
 import HamburgerMenu from '../hamburgerMenu';
 import MenuButton from '../ui/menuButton';
 import { useState } from 'react';
+import { motion } from 'motion/react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  const streamContainerVariants = {
+    rest: {},
+    hover: {
+      transition: { staggerChildren: 0.05 },
+    },
+  };
+
+  const streamLetterVariants = {
+    rest: { scaleX: 1, opacity: 1 },
+    hover: {
+      scaleX: [0, 1],
+      opacity: [0, 1],
+      transition: { duration: 0.1, ease: 'easeInOut' },
+    },
+  };
+
+  const streamLetters = ['S', 'T', 'R', 'E', 'A', 'M'];
+  const aboutLetters = ['A', 'B', 'O', 'U', 'T'];
+  const contactLetters = ['C', 'O', 'N', 'T', 'A', 'C', 'T'];
 
   return (
     <div className="relative backdrop-blur-xs h-16.25">
@@ -22,15 +43,100 @@ const Navbar = () => {
 
         {/* full view for full screens */}
         <div className="links hidden md:grid grid-cols-2 gap-12 col-span-2 ">
-          <div className="nav-links flex gap-12 text-sm pt-1.5 justify-self-center">
-            <Link to="/dashboard">STREAM</Link>
-            <Link to="/about">ABOUT</Link>
-            <Link to="/contact">CONTACT</Link>
+          <div className="nav-links flex gap-12 text-sm pt-1.5 justify-self-center ">
+            <motion.div
+              className="flex justify-center items-center gap-2 group"
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
+            >
+              <motion.span
+                variants={streamContainerVariants}
+                className="size-3 block bg-neutral-300 rounded-full opacity-0 group-hover:opacity-100 -translate-x-3 group-hover:translate-x-0 transition-all duration-200"
+              />
+              <Link
+                to="/dashboard"
+                className="group-hover:text-neutral-300 group-hover:tracking-tighter flex"
+              >
+                <motion.div
+                  className="flex"
+                  variants={streamContainerVariants}
+                  initial="rest"
+                  whileHover="hover"
+                >
+                  {streamLetters.map((letter, i) => (
+                    <motion.span key={i} variants={streamLetterVariants}>
+                      {letter}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              </Link>
+            </motion.div>
+            <motion.div
+              className="flex justify-center items-center gap-2 group"
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
+            >
+              <motion.span
+                variants={streamContainerVariants}
+                className="size-3 block bg-neutral-300 rounded-full opacity-0 group-hover:opacity-100 -translate-x-3 group-hover:translate-x-0 transition-all duration-200"
+              />
+              <Link
+                to="/dashboard"
+                className="group-hover:text-neutral-300 group-hover:tracking-tighter flex"
+              >
+                <motion.div
+                  className="flex"
+                  variants={streamContainerVariants}
+                  initial="rest"
+                  whileHover="hover"
+                >
+                  {aboutLetters.map((letter, i) => (
+                    <motion.span key={i} variants={streamLetterVariants}>
+                      {letter}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              </Link>
+            </motion.div>
+            <motion.div
+              className="flex justify-center items-center gap-2 group"
+              initial="rest"
+              whileHover="hover"
+              animate="rest"
+            >
+              <motion.span
+                variants={streamContainerVariants}
+                className="size-3 block bg-neutral-300 rounded-full opacity-0 group-hover:opacity-100 -translate-x-3 group-hover:translate-x-0 transition-all duration-200"
+              />
+              <Link
+                to="/dashboard"
+                className="group-hover:text-neutral-300 group-hover:tracking-tighter flex"
+              >
+                <motion.div
+                  className="flex"
+                  variants={streamContainerVariants}
+                  initial="rest"
+                  whileHover="hover"
+                >
+                  {contactLetters.map((letter, i) => (
+                    <motion.span key={i} variants={streamLetterVariants}>
+                      {letter}
+                    </motion.span>
+                  ))}
+                </motion.div>
+              </Link>
+            </motion.div>
           </div>
           <div className="buttons flex gap-2 text-sm pt-1.5 justify-self-end pr-5">
-            <Link to="/auth">Signup</Link>
+            <Link to="/auth?signup=true" className="hover:text-neutral-300">
+              Signup
+            </Link>
             <span>|</span>
-            <Link to="/auth">Login</Link>
+            <Link to="/auth" className="hover:text-neutral-300">
+              Login
+            </Link>
           </div>
         </div>
 

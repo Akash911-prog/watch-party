@@ -8,5 +8,12 @@
     "search.exclude": {
         "**/routeTree.gen.ts": true
     },
-    "cSpell.words": ["fontsource", "Samanta", "shadcn", "treeify", "watchparty"]
+    "cSpell.words": [
+        "fontsource",
+        "Samanta",
+        "shadcn",
+        "treeify",
+        "watchparty"
+    ],
+    "antigravity.enableInlineDiff": false
 }
