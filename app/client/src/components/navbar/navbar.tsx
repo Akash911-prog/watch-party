@@ -2,7 +2,7 @@ import { Link } from '@tanstack/react-router';
 import HamburgerMenu from '../hamburgerMenu';
 import MenuButton from '../ui/menuButton';
 import { useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, type Variants } from 'motion/react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -14,7 +14,7 @@ const Navbar = () => {
     },
   };
 
-  const streamLetterVariants = {
+  const streamLetterVariants: Variants = {
     rest: { scaleX: 1, opacity: 1 },
     hover: {
       scaleX: [0, 1],

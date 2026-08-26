@@ -2,12 +2,18 @@ import Navbar from './components/navbar';
 import HeroImg from './assets/hero/3.jpg';
 import bgImage from './assets/hero/1.jpg';
 import { Link } from '@tanstack/react-router';
-import { motion, useScroll, useSpring, useTransform } from 'motion/react';
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  type Variants,
+} from 'motion/react';
 import { useRef } from 'react';
 
 // ─── shared variants ────────────────────────────────────────────
 
-const boxVariants = {
+const boxVariants: Variants = {
   hidden: (direction: 'left' | 'right' | 'down') => ({
     opacity: 0,
     x: direction === 'left' ? -60 : direction === 'right' ? 60 : 0,
@@ -21,7 +27,7 @@ const boxVariants = {
   },
 };
 
-const textVariants = {
+const textVariants: Variants = {
   hidden: { y: 100, opacity: 0 },
   visible: {
     opacity: 1,
