@@ -1,9 +1,9 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_unprotected/about')({
   component: RouteComponent,
-})
+});
 
 function RouteComponent() {
-  return <div>Hello "/_unprotected/about"!</div>
+  return <div className="h-screen bg-black">Hello "/_unprotected/about"!</div>;
 }

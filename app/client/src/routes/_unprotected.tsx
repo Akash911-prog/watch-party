@@ -1,3 +1,4 @@
+import AnimatedRoute from '@/components/animatedRoute';
 import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
@@ -19,8 +20,10 @@ function RouteComponent() {
       >
         <Navbar />
       </motion.nav>
-      <div ref={shrinkRef} className="min-h-screen">
-        <Outlet />
+      <div ref={shrinkRef} className="min-h-screen bg-white">
+        <AnimatedRoute variant="cover">
+          <Outlet />
+        </AnimatedRoute>
       </div>
       <Footer shrinkRef={shrinkRef} />
     </div>
