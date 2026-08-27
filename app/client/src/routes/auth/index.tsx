@@ -12,7 +12,6 @@ const authSchema = z.object({
 export const Route = createFileRoute('/auth/')({
   validateSearch: (search) => authSchema.parse(search),
   beforeLoad: ({ context }) => {
-    console.log(context);
     if (context.isAuthenticated) throw Route.redirect({ to: '/' });
   },
   component: RouteComponent,

@@ -82,10 +82,7 @@ const Navbar = () => {
                 variants={streamContainerVariants}
                 className="size-3 block bg-neutral-300 rounded-full opacity-0 group-hover:opacity-100 -translate-x-3 group-hover:translate-x-0 transition-all duration-200"
               />
-              <Link
-                to="/dashboard"
-                className="group-hover:text-neutral-300  flex"
-              >
+              <Link to="/about" className="group-hover:text-neutral-300  flex">
                 <motion.div
                   className="flex"
                   variants={streamContainerVariants}
@@ -110,10 +107,7 @@ const Navbar = () => {
                 variants={streamContainerVariants}
                 className="size-3 block bg-neutral-300 rounded-full opacity-0 group-hover:opacity-100 -translate-x-3 group-hover:translate-x-0 transition-all duration-200"
               />
-              <Link
-                to="/dashboard"
-                className="group-hover:text-neutral-300 flex"
-              >
+              <Link to="/contact" className="group-hover:text-neutral-300 flex">
                 <motion.div
                   className="flex"
                   variants={streamContainerVariants}
