@@ -1,4 +1,3 @@
-import Navbar from './components/navbar';
 import HeroImg from './assets/hero/3.jpg';
 import bgImage from './assets/hero/1.jpg';
 import {
@@ -9,8 +8,6 @@ import {
   type Variants,
 } from 'motion/react';
 import { useRef } from 'react';
-import Footer from './components/footer';
-import AnimatedRoute from './components/animatedRoute';
 
 // ─── shared variants ────────────────────────────────────────────
 
@@ -192,111 +189,97 @@ function App() {
     ['0%', '-15%'],
   );
 
-  const shrinkRef = useRef<HTMLDivElement>(null);
-
   return (
-    <AnimatedRoute variant="cover">
-      <main className="app relative">
-        <motion.nav
-          className="navbar fixed top-0 z-50"
-          initial={{ opacity: 0, y: -100 }}
-          animate={{ opacity: 1, y: 0 }}
+    <main className="app relative bg-black">
+      <div ref={pinRef} className="relative h-[200vh]">
+        <section
+          className="hero sticky top-0 h-screen overflow-hidden"
+          ref={heroRef}
         >
-          <Navbar />
-        </motion.nav>
-
-        <div ref={pinRef} className="relative h-[200vh]">
-          <section
-            className="hero sticky top-0 h-screen overflow-hidden"
-            ref={heroRef}
-          >
-            <motion.img
-              src={HeroImg}
-              alt="hero"
-              className="absolute inset-0 w-full h-[120%] object-cover -z-10 blur-xs"
-              style={{ y: heroContentY }}
-            />
-            <div className="grid grid-cols-3 grid-rows-[auto_auto_auto_1fr] md:grid-rows-4 h-screen md:pt-40 md:pb-10 pb-3 pt-[70%] gap-y-2">
-              <motion.span
-                className="md:text-main text-5xl col-span-3 min-w-0 pl-6 md:pl-15 font-bold relative w-fit"
-                style={{ paddingLeft: padding }}
-              >
-                WATCH
-              </motion.span>
-              <motion.span
-                className="md:text-main text-5xl col-span-3 justify-self-center min-w-0 font-bold w-fit"
-                style={{ paddingLeft: paddingSmall }}
-              >
-                WITH
-              </motion.span>
-              <motion.span
-                className="md:text-main text-5xl col-span-3 justify-self-end min-w-0 pr-6 md:pr-15 font-bold w-fit"
-                style={{ paddingRight: padding }}
-              >
-                SYNC
-              </motion.span>
-              <motion.p
-                className="col-span-3 self-end mx-auto md:mx-0 md:px-10 md:pl-10 text-sm w-[340px]"
-                style={{ paddingBottom: paddingP }}
-              >
-                Lorem ipsum dolor sit abet cons ecte tur adipisicing elit. Rep
-                ellat dicta nulla nihil
-              </motion.p>
-            </div>
-          </section>
-
-          <motion.section
-            className="about sticky top-0 h-screen w-full bg-black"
-            style={{ clipPath: aboutClip }}
-          >
-            <div className="w-fit mx-auto pt-10 flex gap-2 items-center">
-              <span className="block size-4 rounded-full bg-white"></span>
-              <span className="text-lg">HOW IT WORKS</span>
-            </div>
-            <div className="md:grid grid-cols-[450px_1fr_1fr] grid-rows-3 h-[90%] md:mt-10 mt-4">
-              <div className="col-span-1 row-span-3 self-center flex flex-col md:gap-5 md:pl-9 gap-3 ml-2 mr-4 mb-5 md:mb-0">
-                <p className="text-md font-semibold md:w-[80%]">
-                  Three steps between you and movie night with friends, wherever
-                  they are.
-                </p>
-                <p className="text-sm text-neutral-500 md:w-[80%]">
-                  No downloads, no waiting for someone to catch up. Set it up
-                  once and let the sync handle the rest.
-                </p>
-              </div>
-              <motion.div
-                className="col-span-2 row-span-3 grid grid-cols-2 grid-rows-2 md:mr-9 gap-1.25 md:gap-2.75 h-[75%] md:h-full md:m-0 mx-2"
-                variants={gridContainerVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: false, amount: 0.3 }}
-              >
-                {aboutBoxes.map((box) => (
-                  <AboutBox key={box.label} {...box} />
-                ))}
-              </motion.div>
-            </div>
-          </motion.section>
-        </div>
-
-        <section className="features h-screen">
-          <SectionLabel text="WHY US?" />
-          <motion.div
-            className="grid md:grid-cols-4 grid-cols-2 grid-rows-2 h-[85%] md:gap-2.75 gap-1.25 md:mx-10 mx-2 mt-10"
-            variants={gridContainerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: false, amount: 0.3 }}
-          >
-            {featureCards.map((card) => (
-              <FeatureCard key={card.title} {...card} />
-            ))}
-          </motion.div>
+          <motion.img
+            src={HeroImg}
+            alt="hero"
+            className="absolute inset-0 w-full h-[120%] object-cover -z-10 blur-xs"
+            style={{ y: heroContentY }}
+          />
+          <div className="grid grid-cols-3 grid-rows-[auto_auto_auto_1fr] md:grid-rows-4 h-screen md:pt-40 md:pb-10 pb-3 pt-[70%] gap-y-2">
+            <motion.span
+              className="md:text-main text-5xl col-span-3 min-w-0 pl-6 md:pl-15 font-bold relative w-fit"
+              style={{ paddingLeft: padding }}
+            >
+              WATCH
+            </motion.span>
+            <motion.span
+              className="md:text-main text-5xl col-span-3 justify-self-center min-w-0 font-bold w-fit"
+              style={{ paddingLeft: paddingSmall }}
+            >
+              WITH
+            </motion.span>
+            <motion.span
+              className="md:text-main text-5xl col-span-3 justify-self-end min-w-0 pr-6 md:pr-15 font-bold w-fit"
+              style={{ paddingRight: padding }}
+            >
+              SYNC
+            </motion.span>
+            <motion.p
+              className="col-span-3 self-end mx-auto md:mx-0 md:px-10 md:pl-10 text-sm w-[340px]"
+              style={{ paddingBottom: paddingP }}
+            >
+              Lorem ipsum dolor sit abet cons ecte tur adipisicing elit. Rep
+              ellat dicta nulla nihil
+            </motion.p>
+          </div>
         </section>
 
-        <Footer shrinkRef={shrinkRef} />
-      </main>
-    </AnimatedRoute>
+        <motion.section
+          className="about sticky top-0 h-screen w-full bg-black"
+          style={{ clipPath: aboutClip }}
+        >
+          <div className="w-fit mx-auto pt-10 flex gap-2 items-center">
+            <span className="block size-4 rounded-full bg-white"></span>
+            <span className="text-lg">HOW IT WORKS</span>
+          </div>
+          <div className="md:grid grid-cols-[450px_1fr_1fr] grid-rows-3 h-[90%] md:mt-10 mt-4">
+            <div className="col-span-1 row-span-3 self-center flex flex-col md:gap-5 md:pl-9 gap-3 ml-2 mr-4 mb-5 md:mb-0">
+              <p className="text-md font-semibold md:w-[80%]">
+                Three steps between you and movie night with friends, wherever
+                they are.
+              </p>
+              <p className="text-sm text-neutral-500 md:w-[80%]">
+                No downloads, no waiting for someone to catch up. Set it up once
+                and let the sync handle the rest.
+              </p>
+            </div>
+            <motion.div
+              className="col-span-2 row-span-3 grid grid-cols-2 grid-rows-2 md:mr-9 gap-1.25 md:gap-2.75 h-[75%] md:h-full md:m-0 mx-2"
+              variants={gridContainerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: false, amount: 0.3 }}
+            >
+              {aboutBoxes.map((box) => (
+                <AboutBox key={box.label} {...box} />
+              ))}
+            </motion.div>
+          </div>
+        </motion.section>
+      </div>
+
+      <section className="features h-screen bg-black">
+        <SectionLabel text="WHY US?" />
+        <motion.div
+          className="grid md:grid-cols-4 grid-cols-2 grid-rows-2 h-[85%] md:gap-2.75 gap-1.25 md:mx-10 mx-2 mt-10"
+          variants={gridContainerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: false, amount: 0.3 }}
+        >
+          {featureCards.map((card) => (
+            <FeatureCard key={card.title} {...card} />
+          ))}
+        </motion.div>
+      </section>
+    </main>
   );
 }
 

@@ -11,7 +11,7 @@ function RouteAnimationContainer({ children }: RouteAnimationContainerProps) {
   const router = useRouter();
 
   return (
-    <AnimatePresence mode="wait" initial={false}>
+    <AnimatePresence mode="popLayout" initial={false}>
       <div key={router.state.location.pathname}>{children}</div>
     </AnimatePresence>
   );

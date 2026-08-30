@@ -34,16 +34,16 @@ const routeVariants: Record<string, Variants> = {
     out: { opacity: 0, y: -20 },
   },
   cover: {
-    initial: { opacity: 0.2, y: 200, z: -50, scale: 1 },
-    in: { opacity: 1, y: 0, z: 0 },
-    out: { opacity: 0.7, y: -200, z: -50, scale: 0.9 },
+    initial: { y: '100%', z: 100, opacity: 1 },
+    in: { y: '0%' },
+    out: { y: '0%', scale: 0.9, z: -100, opacity: 0.8 }, // old page just stays put, gets covered — no exit motion needed
   },
 };
 
 const pageTransition: Transition = {
-  type: 'tween',
-  ease: 'anticipate',
-  duration: 0.3,
+  type: 'spring',
+  damping: 20,
+  duration: 1,
 };
 
 export default function AnimatedRoute({

@@ -12,20 +12,20 @@ export const Route = createFileRoute('/_unprotected')({
 function RouteComponent() {
   const shrinkRef = useRef<HTMLDivElement>(null);
   return (
-    <div>
-      <motion.nav
-        className="navbar fixed top-0 z-50"
-        initial={{ opacity: 0, y: -100 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
-        <Navbar />
-      </motion.nav>
-      <div ref={shrinkRef} className="min-h-screen bg-white">
-        <AnimatedRoute variant="cover">
+    <div className="bg-white">
+      <AnimatedRoute variant="cover">
+        <motion.nav
+          className="navbar fixed top-0 z-50"
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+        >
+          <Navbar />
+        </motion.nav>
+        <div ref={shrinkRef} className="min-h-screen">
           <Outlet />
-        </AnimatedRoute>
-      </div>
-      <Footer shrinkRef={shrinkRef} />
+        </div>
+        <Footer shrinkRef={shrinkRef} />
+      </AnimatedRoute>
     </div>
   );
 }
