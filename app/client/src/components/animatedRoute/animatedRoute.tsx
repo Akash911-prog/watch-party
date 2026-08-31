@@ -97,10 +97,18 @@ export default function AnimatedRoute({
   return (
     <motion.div
       initial="initial"
-      animate="in"
-      exit="out"
+      animate={isExiting ? 'out' : 'in'}
       variants={routeVariants[variant]}
       transition={pageTransition}
+      onAnimationComplete={(definition) => {
+        if (definition !== 'out') {
+          return;
+        }
+        if (blocker.status !== 'blocked') {
+          return;
+        }
+        blocker.proceed();
+      }}
       {...motionProps}
     >
       {children}
