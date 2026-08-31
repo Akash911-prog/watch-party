@@ -87,6 +87,9 @@ export default function AnimatedRoute({
     setIsExiting(true);
   }, [blocker.status]);
 
+  const { onAnimationComplete: externalOnComplete, ...restMotionProps } =
+    motionProps;
+
   useEffect(() => {
     if (blocker.status === 'idle') {
       hasStartedExit.current = false;
@@ -101,15 +104,12 @@ export default function AnimatedRoute({
       variants={routeVariants[variant]}
       transition={pageTransition}
       onAnimationComplete={(definition) => {
-        if (definition !== 'out') {
-          return;
-        }
-        if (blocker.status !== 'blocked') {
-          return;
-        }
+        externalOnComplete?.(definition); // let the caller still know
+        if (definition !== 'out') return;
+        if (blocker.status !== 'blocked') return;
         blocker.proceed();
       }}
-      {...motionProps}
+      {...restMotionProps}
     >
       {children}
     </motion.div>
