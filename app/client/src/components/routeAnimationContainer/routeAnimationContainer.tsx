@@ -14,7 +14,7 @@ function RouteAnimationContainer({ children }: RouteAnimationContainerProps) {
   return (
     <div className="relative">
       {/* Route */}
-      <AnimatePresence mode="popLayout" initial={true}>
+      <AnimatePresence mode="wait" initial={true}>
         <motion.div
           key={pathname}
           initial={{ opacity: 0 }}

@@ -1,11 +1,17 @@
-// src/components/animated-route.tsx
+import { useBlocker } from '@tanstack/react-router';
 import {
   motion,
   type MotionProps,
   type Transition,
   type Variants,
 } from 'motion/react';
-import type { ReactNode } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from 'react';
 
 interface AnimatedRouteProps extends MotionProps {
   children: ReactNode;
@@ -35,8 +41,13 @@ const routeVariants: Record<string, Variants> = {
   },
   cover: {
     initial: { y: '100%', z: 100, opacity: 1 },
-    in: { y: '0%' },
-    out: { y: '0%', scale: 0.9, z: -100, opacity: 0.8 }, // old page just stays put, gets covered — no exit motion needed
+    in: { y: '0%', scale: 1, opacity: 1 },
+    out: {
+      y: '0%',
+      scale: 0.9,
+      z: -100,
+      opacity: 0.8,
+    },
   },
 };
 
@@ -51,13 +62,56 @@ export default function AnimatedRoute({
   variant = 'fade',
   ...motionProps
 }: AnimatedRouteProps) {
+  const [isExiting, setIsExiting] = useState(false);
+  const hasStartedExit = useRef(false);
+
+  const shouldBlockFn = useCallback(() => true, []);
+  const blocker = useBlocker({
+    shouldBlockFn,
+    withResolver: true,
+    enableBeforeUnload: false,
+  });
+  /*
+   * When TanStack blocks a navigation, start the exit animation.
+   */
+  useEffect(() => {
+    if (blocker.status !== 'blocked') {
+      return;
+    }
+
+    if (hasStartedExit.current) {
+      return;
+    }
+
+    hasStartedExit.current = true;
+    setIsExiting(true);
+  }, [blocker.status]);
+
+  useEffect(() => {
+    if (blocker.status === 'idle') {
+      hasStartedExit.current = false;
+      setIsExiting(false);
+    }
+  }, [blocker.status]);
+
   return (
     <motion.div
       initial="initial"
-      animate="in"
-      exit="out"
+      animate={isExiting ? 'out' : 'in'}
       variants={routeVariants[variant]}
       transition={pageTransition}
+      onAnimationComplete={(definition) => {
+        console.log(blocker.status, blocker.proceed);
+        if (definition !== 'out') {
+          return;
+        }
+
+        if (blocker.status !== 'blocked') {
+          return;
+        }
+
+        blocker.proceed();
+      }}
       {...motionProps}
     >
       {children}
