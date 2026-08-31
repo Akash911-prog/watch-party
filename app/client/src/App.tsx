@@ -76,6 +76,7 @@ interface FeatureCardProps {
   image: string;
   direction: Direction;
   className?: string;
+  order?: string;
 }
 
 function FeatureCard({
@@ -84,19 +85,20 @@ function FeatureCard({
   image,
   direction,
   className = '',
+  order = '',
 }: FeatureCardProps) {
   return (
     <motion.div
       custom={direction}
       variants={boxVariants}
-      className={`relative bg-neutral-700 overflow-hidden group z-0 ${className}`}
+      className={`relative bg-neutral-700 overflow-hidden group z-0 ${className} ${order}`}
     >
       <img
         src={image}
         alt={title}
         className="absolute inset-0 object-cover w-full h-full group-hover:w-[120%] group-hover:h-[120%] group-active:w-[120%] group-active:h-[120%] transition-all duration-300 z-10"
       />
-      <span className="md:text-xl font-semibold absolute md:bottom-5 md:left-5 bottom-2 left-2 text-neutral-300 group-hover:-translate-y-15 group-active:-translate-y-10 transition-all duration-300 z-30">
+      <span className="md:text-xl font-semibold absolute md:bottom-5 md:left-5 bottom-2 left-2 text-neutral-300 md:group-hover:-translate-y-15 group-hover:-translate-y-10 group-active:-translate-y-10 transition-all duration-300 z-30">
         {title}
       </span>
       <p className="text-neutral-500 md:text-md text-[10px] absolute -bottom-10 md:left-5 left-2 opacity-0 group-hover:opacity-100 group-hover:bottom-0 group-active:opacity-100 group-active:bottom-0 z-30 transition-all duration-300">
@@ -114,6 +116,7 @@ const featureCards: (FeatureCardProps & { className: string })[] = [
     image: bgImage,
     direction: 'left',
     className: 'md:col-span-2 md:row-span-2',
+    order: 'order-1',
   },
   {
     title: 'Group Watch Parties',
@@ -122,22 +125,25 @@ const featureCards: (FeatureCardProps & { className: string })[] = [
     image: HeroImg,
     direction: 'right',
     className: 'md:col-span-2',
+    order: 'order-2',
   },
   {
     title: 'Cross Platform',
     description:
       'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Modi reprehenderit tempora sunt.',
     image: bgImage,
-    direction: 'down',
+    direction: 'right',
     className: '',
+    order: 'order-4',
   },
   {
     title: 'Zero Setup',
     description:
       'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Modi reprehenderit tempora sunt.',
     image: HeroImg,
-    direction: 'left',
+    direction: 'down',
     className: '',
+    order: 'order-3',
   },
 ];
 

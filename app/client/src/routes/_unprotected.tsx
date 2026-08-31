@@ -1,6 +1,7 @@
 import AnimatedRoute from '@/components/animatedRoute';
 import Footer from '@/components/footer';
 import Navbar from '@/components/navbar';
+import SplashScreen from '@/components/splashScreen';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
 import { motion } from 'motion/react';
 import { useRef, useState } from 'react';
@@ -16,6 +17,7 @@ function RouteComponent() {
 
   return (
     <div className="bg-white">
+      <SplashScreen />
       <motion.nav
         className="navbar fixed top-0 z-50"
         initial={{ opacity: 0, y: -100 }}
