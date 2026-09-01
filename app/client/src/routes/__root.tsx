@@ -6,6 +6,7 @@ import { Toaster } from '@/components/ui/toast';
 import Lenis from 'lenis';
 import { useEffect } from 'react';
 import RouteAnimationContainer from '@/components/routeAnimationContainer';
+import { RouteTransitionProvider } from '@/contexts/routeTransition';
 
 // this is like the layout.tsx file of Nextjs
 
@@ -34,9 +35,11 @@ function RootComponent() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system" storageKey="ui-theme">
         <Toaster position="bottom-right" />
-        <RouteAnimationContainer>
-          <Outlet />
-        </RouteAnimationContainer>
+        <RouteTransitionProvider>
+          <RouteAnimationContainer>
+            <Outlet />
+          </RouteAnimationContainer>
+        </RouteTransitionProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );

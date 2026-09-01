@@ -53,7 +53,7 @@ const SignupForm = () => {
       password: data.password,
     });
     authStore.setUser(user);
-    navigate({ to: '/' });
+    navigate({ to: '/home' });
   };
 
   return (

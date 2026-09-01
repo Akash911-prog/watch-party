@@ -1,3 +1,4 @@
+import { useRouteTransition } from '@/contexts/routeTransition';
 import { useRouter } from '@tanstack/react-router';
 import { AnimatePresence, motion } from 'motion/react';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
@@ -13,11 +14,12 @@ function RouteAnimationContainer({ children }: RouteAnimationContainerProps) {
 
   const [transitionKey, setTransitionKey] = useState(0);
 
+  const { isExiting } = useRouteTransition();
+
+  // replace the transitionKey useEffect with just:
   useEffect(() => {
-    return router.subscribe('onBeforeNavigate', () => {
-      setTransitionKey((key) => key + 1);
-    });
-  }, [router]);
+    if (isExiting) setTransitionKey((k) => k + 1);
+  }, [isExiting]);
 
   return (
     <div className="relative">
@@ -41,7 +43,7 @@ function RouteAnimationContainer({ children }: RouteAnimationContainerProps) {
       <motion.div
         ref={ref}
         key={transitionKey}
-        className="fixed inset-0 bg-black z-1000"
+        className="fixed inset-0 bg-black z-50"
         initial={{ y: '100%' }}
         animate={{ y: '0%' }}
         transition={{

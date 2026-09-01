@@ -1,17 +1,11 @@
-import { useBlocker } from '@tanstack/react-router';
+import { useRouteTransition } from '@/contexts/routeTransition';
 import {
   motion,
   type MotionProps,
   type Transition,
   type Variants,
 } from 'motion/react';
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from 'react';
+import { type ReactNode } from 'react';
 
 interface AnimatedRouteProps extends MotionProps {
   children: ReactNode;
@@ -62,40 +56,10 @@ export default function AnimatedRoute({
   variant = 'fade',
   ...motionProps
 }: AnimatedRouteProps) {
-  const [isExiting, setIsExiting] = useState(false);
-  const hasStartedExit = useRef(false);
-
-  const shouldBlockFn = useCallback(() => true, []);
-  const blocker = useBlocker({
-    shouldBlockFn,
-    withResolver: true,
-    enableBeforeUnload: false,
-  });
-  /*
-   * When TanStack blocks a navigation, start the exit animation.
-   */
-  useEffect(() => {
-    if (blocker.status !== 'blocked') {
-      return;
-    }
-
-    if (hasStartedExit.current) {
-      return;
-    }
-
-    hasStartedExit.current = true;
-    setIsExiting(true);
-  }, [blocker.status]);
+  const { isExiting, onExitComplete } = useRouteTransition();
 
   const { onAnimationComplete: externalOnComplete, ...restMotionProps } =
     motionProps;
-
-  useEffect(() => {
-    if (blocker.status === 'idle') {
-      hasStartedExit.current = false;
-      setIsExiting(false);
-    }
-  }, [blocker.status]);
 
   return (
     <motion.div
@@ -104,10 +68,9 @@ export default function AnimatedRoute({
       variants={routeVariants[variant]}
       transition={pageTransition}
       onAnimationComplete={(definition) => {
-        externalOnComplete?.(definition); // let the caller still know
+        externalOnComplete?.(definition);
         if (definition !== 'out') return;
-        if (blocker.status !== 'blocked') return;
-        blocker.proceed();
+        onExitComplete();
       }}
       {...restMotionProps}
     >

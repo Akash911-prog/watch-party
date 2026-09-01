@@ -3,6 +3,7 @@ import HamburgerMenu from '../hamburgerMenu';
 import MenuButton from '../ui/menuButton';
 import { useState } from 'react';
 import { motion, type Variants } from 'motion/react';
+import { useAuthStore } from '@/hooks/useAuth';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -23,9 +24,11 @@ const Navbar = () => {
     },
   };
 
-  const streamLetters = ['S', 'T', 'R', 'E', 'A', 'M'];
+  const streamLetters = ['H', 'O', 'M', 'E'];
   const aboutLetters = ['A', 'B', 'O', 'U', 'T'];
   const contactLetters = ['C', 'O', 'N', 'T', 'A', 'C', 'T'];
+
+  const authStore = useAuthStore();
 
   return (
     <div className="relative backdrop-blur-xs h-16.25">
@@ -38,7 +41,7 @@ const Navbar = () => {
         <div
           className={`logo text-md pt-0.5 z-50 ${isOpen ? 'text-black' : 'text-white'} transition-all duration-200 ease-in-out`}
         >
-          <Link to="/">SHOWTIME</Link>
+          <Link to="/home">SHOWTIME</Link>
         </div>
 
         {/* full view for full screens */}
@@ -54,10 +57,7 @@ const Navbar = () => {
                 variants={streamContainerVariants}
                 className="size-3 block bg-neutral-300 rounded-full opacity-0 group-hover:opacity-100 -translate-x-3 group-hover:translate-x-0 transition-all duration-200"
               />
-              <Link
-                to="/dashboard"
-                className="group-hover:text-neutral-300 flex"
-              >
+              <Link to="/home" className="group-hover:text-neutral-300 flex">
                 <motion.div
                   className="flex"
                   variants={streamContainerVariants}
@@ -123,13 +123,25 @@ const Navbar = () => {
               </Link>
             </motion.div>
           </div>
-          <div className="buttons flex gap-2 text-sm pt-1.5 justify-self-end pr-5">
+          <div
+            className="buttons flex gap-2 text-sm pt-1.5 justify-self-end pr-5"
+            style={{ display: authStore.isAuthenticated ? 'none' : 'block' }}
+          >
             <Link to="/auth?signup=true" className="hover:text-neutral-300">
               Signup
             </Link>
             <span>|</span>
             <Link to="/auth" className="hover:text-neutral-300">
               Login
+            </Link>
+          </div>
+          <div className="text-sm pt-1.5 justify-self-end pr-5">
+            <Link
+              to="/dashboard"
+              className="hover:text-neutral-300"
+              style={{ display: authStore.isAuthenticated ? 'block' : 'none' }}
+            >
+              Dashboard
             </Link>
           </div>
         </div>

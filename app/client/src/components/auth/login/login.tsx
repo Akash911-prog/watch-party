@@ -47,7 +47,7 @@ const LoginForm = () => {
     await api.post('/auth/login', data);
     const user = await api.get<User>('/auth/verify');
     authStore.setUser(user);
-    navigate({ to: '/' });
+    navigate({ to: '/home' });
   };
 
   return (
