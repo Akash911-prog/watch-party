@@ -56,7 +56,7 @@ export function AppSidebar() {
                     asChild
                     isActive={item.title === 'Dashboard'}
                   >
-                    <Link to={item.href}>
+                    <Link to={item.href} className="flex items-center gap-2">
                       <item.icon />
                       <span>{item.title}</span>
                     </Link>

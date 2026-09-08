@@ -14,6 +14,7 @@ import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as UnprotectedRouteImport } from './routes/_unprotected'
 import { Route as ProtectedDashboardRouteImport } from './routes/_protected/dashboard'
 import { Route as ProtectedRoomRouteImport } from './routes/_protected/room'
+import { Route as ProtectedUploadRouteImport } from './routes/_protected/upload'
 import { Route as UnprotectedAboutRouteImport } from './routes/_unprotected/about'
 import { Route as UnprotectedContactRouteImport } from './routes/_unprotected/contact'
 import { Route as UnprotectedHomeRouteImport } from './routes/_unprotected/home'
@@ -42,6 +43,11 @@ const ProtectedRoomRoute = ProtectedRoomRouteImport.update({
   path: '/room',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedUploadRoute = ProtectedUploadRouteImport.update({
+  id: '/upload',
+  path: '/upload',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const UnprotectedAboutRoute = UnprotectedAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dashboard': typeof ProtectedDashboardRoute
   '/room': typeof ProtectedRoomRoute
+  '/upload': typeof ProtectedUploadRoute
   '/about': typeof UnprotectedAboutRoute
   '/contact': typeof UnprotectedContactRoute
   '/home': typeof UnprotectedHomeRoute
@@ -76,6 +83,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dashboard': typeof ProtectedDashboardRoute
   '/room': typeof ProtectedRoomRoute
+  '/upload': typeof ProtectedUploadRoute
   '/about': typeof UnprotectedAboutRoute
   '/contact': typeof UnprotectedContactRoute
   '/home': typeof UnprotectedHomeRoute
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/_unprotected': typeof UnprotectedRouteWithChildren
   '/_protected/dashboard': typeof ProtectedDashboardRoute
   '/_protected/room': typeof ProtectedRoomRoute
+  '/_protected/upload': typeof ProtectedUploadRoute
   '/_unprotected/about': typeof UnprotectedAboutRoute
   '/_unprotected/contact': typeof UnprotectedContactRoute
   '/_unprotected/home': typeof UnprotectedHomeRoute
@@ -96,9 +105,24 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/dashboard' | '/room' | '/about' | '/contact' | '/home' | '/auth/'
+    | '/'
+    | '/dashboard'
+    | '/room'
+    | '/upload'
+    | '/about'
+    | '/contact'
+    | '/home'
+    | '/auth/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dashboard' | '/room' | '/about' | '/contact' | '/home' | '/auth'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/room'
+    | '/upload'
+    | '/about'
+    | '/contact'
+    | '/home'
+    | '/auth'
   id:
     | '__root__'
     | '/'
@@ -106,6 +130,7 @@ export interface FileRouteTypes {
     | '/_unprotected'
     | '/_protected/dashboard'
     | '/_protected/room'
+    | '/_protected/upload'
     | '/_unprotected/about'
     | '/_unprotected/contact'
     | '/_unprotected/home'
@@ -156,6 +181,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedRoomRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/upload': {
+      id: '/_protected/upload'
+      path: '/upload'
+      fullPath: '/upload'
+      preLoaderRoute: typeof ProtectedUploadRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
     '/_unprotected/about': {
       id: '/_unprotected/about'
       path: '/about'
@@ -190,11 +222,13 @@ declare module '@tanstack/react-router' {
 interface ProtectedRouteChildren {
   ProtectedDashboardRoute: typeof ProtectedDashboardRoute
   ProtectedRoomRoute: typeof ProtectedRoomRoute
+  ProtectedUploadRoute: typeof ProtectedUploadRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedDashboardRoute: ProtectedDashboardRoute,
   ProtectedRoomRoute: ProtectedRoomRoute,
+  ProtectedUploadRoute: ProtectedUploadRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(

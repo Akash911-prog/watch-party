@@ -5,8 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toast';
 import Lenis from 'lenis';
 import { useEffect } from 'react';
-import RouteAnimationContainer from '@/components/routeAnimationContainer';
-import { RouteTransitionProvider } from '@/contexts/routeTransition';
+
 import { TooltipProvider } from '@/components/ui/tooltip';
 
 // this is like the layout.tsx file of Nextjs
@@ -37,11 +36,7 @@ function RootComponent() {
       <ThemeProvider defaultTheme="system" storageKey="ui-theme">
         <TooltipProvider>
           <Toaster position="bottom-right" />
-          <RouteTransitionProvider>
-            <RouteAnimationContainer>
-              <Outlet />
-            </RouteAnimationContainer>
-          </RouteTransitionProvider>
+          <Outlet />
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
