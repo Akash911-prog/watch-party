@@ -10,8 +10,10 @@ export async function getUploadUrl(req: Request, res: Response) {
         return res.status(result.error.code).json(result.error);
     }
     let accessToken = result.value as string;
-    console.log(accessToken);
-    let resultReq = await getUploadUrlProcess("", data);
+    let resultReq = await getUploadUrlProcess(accessToken, data);
+    if (!resultReq.ok) {
+        return res.status(resultReq.error.code).json(resultReq.error);
+    }
 
-    return res.status(200).json({});
+    return res.status(200).json({ uploadUrl: resultReq.value });
 }

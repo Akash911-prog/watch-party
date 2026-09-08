@@ -1,4 +1,4 @@
-import { videoMetadataSchema } from "../schemas";
+import { videoMetadataSchema, videoMetadataSchemaYt } from "../schemas";
 import type { z } from "zod";
 
 export type accessTokenReq = {
@@ -10,3 +10,4 @@ export type accessTokenReq = {
 };
 
 export type VideoMetadata = z.infer<typeof videoMetadataSchema>;
+export type VideoMetadataYt = z.infer<typeof videoMetadataSchemaYt>;

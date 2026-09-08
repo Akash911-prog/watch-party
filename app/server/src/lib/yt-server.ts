@@ -4,7 +4,6 @@ import type { accessTokenReq } from "@watchparty/shared/types";
 
 export async function getAccessToken() {
     try {
-        console.log("Access token requested...");
         const res = await fetch("https://oauth2.googleapis.com/token", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -15,6 +14,7 @@ export async function getAccessToken() {
                 grant_type: "refresh_token",
             }),
         });
+
         if (!res.ok) {
             const err = await res.text();
             switch (res.status) {
@@ -57,7 +57,6 @@ export async function getAccessToken() {
         }
 
         const data = (await res.json()) as accessTokenReq;
-        console.log("success");
         return Ok(data.access_token); // valid for ~1 hour, discard after use
     } catch (error) {
         return Err({

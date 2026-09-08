@@ -7,6 +7,8 @@ import { env } from "./env";
 import authRouter from "./routes/auth";
 import cookieParser from "cookie-parser";
 import videoRouter from "./routes/video";
+import { idAttach } from "./middleware/idAttach";
+import { consoleLogger } from "./middleware/logger";
 
 const app: Express = express();
 const port = env.PORT;
@@ -34,6 +36,9 @@ app.get("/", async (req, res) => {
     res.send("Hello World!");
 });
 app.get("/health", async (req, res) => res.status(200).json({}));
+
+app.use(idAttach);
+app.use(consoleLogger);
 
 app.use("/user", userRouter);
 app.use("/auth", authRouter);

@@ -11,11 +11,20 @@ import { requestSchema } from "./user";
 //   }
 
 export const videoMetadataSchema = z.object({
+    title: z.string(),
+    description: z.string().default("uploaded from watch party").optional(),
+    tags: z.array(z.string()).default([]).optional(),
+    categoryId: z.string().default("22").optional(),
+    size: z.number().default(0).optional(),
+    mimeType: z.string().default("video/mp4").optional(),
+});
+
+export const videoMetadataSchemaYt = z.object({
     snippet: z.object({
         title: z.string(),
         description: z.string().default("uploaded from watch party").optional(),
         tags: z.array(z.string()).default([]).optional(),
-        categoryId: z.string().default("").optional(),
+        categoryId: z.string().default("22").optional(),
     }),
     status: z
         .object({
