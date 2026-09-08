@@ -7,6 +7,7 @@ import Lenis from 'lenis';
 import { useEffect } from 'react';
 import RouteAnimationContainer from '@/components/routeAnimationContainer';
 import { RouteTransitionProvider } from '@/contexts/routeTransition';
+import { TooltipProvider } from '@/components/ui/tooltip';
 
 // this is like the layout.tsx file of Nextjs
 
@@ -34,12 +35,14 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider defaultTheme="system" storageKey="ui-theme">
-        <Toaster position="bottom-right" />
-        <RouteTransitionProvider>
-          <RouteAnimationContainer>
-            <Outlet />
-          </RouteAnimationContainer>
-        </RouteTransitionProvider>
+        <TooltipProvider>
+          <Toaster position="bottom-right" />
+          <RouteTransitionProvider>
+            <RouteAnimationContainer>
+              <Outlet />
+            </RouteAnimationContainer>
+          </RouteTransitionProvider>
+        </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
   );
