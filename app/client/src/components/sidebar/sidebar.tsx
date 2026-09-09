@@ -8,6 +8,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from '@/components/ui/sidebar';
 import {
   DropdownMenu,
@@ -27,6 +28,7 @@ import {
 } from 'lucide-react';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { useAuthStore } from '@/hooks/useAuth';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const NAV_ITEMS = [
   { title: 'Home', icon: Home, href: '/' },
@@ -38,6 +40,8 @@ const NAV_ITEMS = [
 export function AppSidebar() {
   const { user } = useAuthStore();
   const initial = user?.username?.[0] ?? 'G';
+  const { toggleSidebar } = useSidebar();
+  const isMobile = useIsMobile();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -48,7 +52,7 @@ export function AppSidebar() {
       <SidebarHeader className="px-3 py-3">
         <div className="flex items-center gap-2 px-1">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground text-sm font-semibold">
-            {initial}
+            {initial.toUpperCase()}
           </div>
           <span className="text-sm font-semibold">
             {user?.username ?? 'Guest'}
@@ -64,7 +68,10 @@ export function AppSidebar() {
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
                     isActive={item.title.toLowerCase() === pathname}
-                    onClick={() => navigate({ to: item.href })}
+                    onClick={() => {
+                      navigate({ to: item.href });
+                      if (isMobile) toggleSidebar();
+                    }}
                   >
                     <item.icon />
                     <span>{item.title}</span>
@@ -80,7 +87,7 @@ export function AppSidebar() {
         <DropdownMenu>
           <DropdownMenuTrigger>
             <div className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors cursor-pointer">
-              <span className="font-medium truncate">username</span>
+              <span className="font-medium truncate">{user?.username}</span>
               <ChevronsUpDown className="h-4 w-4 opacity-60" />
             </div>
           </DropdownMenuTrigger>

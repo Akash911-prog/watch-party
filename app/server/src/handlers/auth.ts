@@ -37,5 +37,5 @@ export async function verify(req: Request, res: Response) {
             .json({ success: false, message: "Unauthorized" });
     }
 
-    return res.status(200).json({ user });
+    return res.status(200).json(user);
 }
