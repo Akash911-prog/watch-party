@@ -25,7 +25,8 @@ import {
   Settings,
   LogOut,
 } from 'lucide-react';
-import { Link } from '@tanstack/react-router';
+import { useLocation, useNavigate } from '@tanstack/react-router';
+import { useAuthStore } from '@/hooks/useAuth';
 
 const NAV_ITEMS = [
   { title: 'Home', icon: Home, href: '/' },
@@ -35,14 +36,23 @@ const NAV_ITEMS = [
 ];
 
 export function AppSidebar() {
+  const { user } = useAuthStore();
+  const initial = user?.username?.[0] ?? 'G';
+
+  const navigate = useNavigate();
+  const location = useLocation();
+  const pathname = location.pathname.split('/')[1];
+
   return (
     <Sidebar>
       <SidebarHeader className="px-3 py-3">
         <div className="flex items-center gap-2 px-1">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground text-sm font-semibold">
-            A
+            {initial}
           </div>
-          <span className="text-sm font-semibold">Acme</span>
+          <span className="text-sm font-semibold">
+            {user?.username ?? 'Guest'}
+          </span>
         </div>
       </SidebarHeader>
 
@@ -53,13 +63,11 @@ export function AppSidebar() {
               {NAV_ITEMS.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton
-                    asChild
-                    isActive={item.title === 'Dashboard'}
+                    isActive={item.title.toLowerCase() === pathname}
+                    onClick={() => navigate({ to: item.href })}
                   >
-                    <Link to={item.href} className="flex items-center gap-2">
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
+                    <item.icon />
+                    <span>{item.title}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -70,11 +78,11 @@ export function AppSidebar() {
 
       <SidebarFooter className="px-3 py-3">
         <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors">
+          <DropdownMenuTrigger>
+            <div className="flex w-full items-center justify-between rounded-md px-2 py-1.5 text-sm hover:bg-sidebar-accent hover:text-sidebar-accent-foreground transition-colors cursor-pointer">
               <span className="font-medium truncate">username</span>
               <ChevronsUpDown className="h-4 w-4 opacity-60" />
-            </button>
+            </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
             side="top"
