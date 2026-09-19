@@ -1,3 +1,4 @@
+import Upload from '@/pages/upload';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/_protected/upload')({
@@ -5,5 +6,9 @@ export const Route = createFileRoute('/_protected/upload')({
 });
 
 function RouteComponent() {
-  return <div>Hello "/_protected/upload"!</div>;
+  return (
+    <div>
+      <Upload />
+    </div>
+  );
 }

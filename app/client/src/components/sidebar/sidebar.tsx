@@ -48,7 +48,7 @@ export function AppSidebar() {
   const pathname = location.pathname.split('/')[1];
 
   return (
-    <Sidebar>
+    <Sidebar className="w-[clamp(200px,20vw,300px)]">
       <SidebarHeader className="px-3 py-3">
         <div className="flex items-center gap-2 px-1">
           <div className="flex h-7 w-7 items-center justify-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground text-sm font-semibold">

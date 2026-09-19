@@ -20,7 +20,6 @@ function RootComponent() {
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
-      // there are more options — easing curve, wheel multiplier, etc.
     });
 
     function raf(time: number) {
