@@ -15,6 +15,7 @@ const envSchema = z.object({
     GOOGLE_CLIENT_SECRET: z.string(),
     GOOGLE_REDIRECT_URI: z.string(),
     YT_REFRESH_TOKEN: z.string(),
+    FRONTEND_URL: z.string(),
 });
 
 // Validate once, at startup

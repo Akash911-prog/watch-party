@@ -9,11 +9,15 @@ interface RequestConfig extends Omit<
   params?: Record<string, string | number | boolean | undefined>;
   data?: unknown;
   credentials?: RequestCredentials;
+  /** Return the raw Response instead of the parsed body. */
+  raw?: boolean;
+  /** Decide which statuses count as success. Default: 2xx. */
+  validateStatus?: (status: number) => boolean;
 }
 
 interface ApiClientConfig {
   baseURL?: string;
-  headers?: Record<string, string>;
+  headers?: HeadersInit;
   timeout?: number;
   credentials?: RequestCredentials; // 'omit' | 'same-origin' | 'include'
 }
@@ -32,14 +36,39 @@ export class ApiError extends Error {
   }
 }
 
+type InternalConfig = RequestConfig & { url: string };
+
 type RequestInterceptor = (
-  config: RequestConfig & { url: string },
-) =>
-  | (RequestConfig & { url: string })
-  | Promise<RequestConfig & { url: string }>;
+  config: InternalConfig,
+) => InternalConfig | Promise<InternalConfig>;
 
 type ResponseInterceptor = (response: Response) => Response | Promise<Response>;
 type ErrorInterceptor = (error: unknown) => unknown | Promise<unknown>;
+
+// Merge any HeadersInit shapes (plain object, Headers, [k, v][]) into a plain
+// object with lowercase keys. Later sources win.
+const mergeHeaders = (
+  ...sources: (HeadersInit | undefined)[]
+): Record<string, string> => {
+  const out: Record<string, string> = {};
+  for (const source of sources) {
+    new Headers(source).forEach((value, key) => {
+      out[key] = value;
+    });
+  }
+  return out;
+};
+
+// Bodies that fetch understands natively and must NOT be JSON-stringified.
+const isRawBody = (data: unknown): data is BodyInit =>
+  data instanceof Blob ||
+  data instanceof ArrayBuffer ||
+  ArrayBuffer.isView(data) || // Uint8Array, Buffer, DataView...
+  data instanceof FormData ||
+  data instanceof URLSearchParams ||
+  (typeof ReadableStream !== 'undefined' && data instanceof ReadableStream);
+
+const defaultValidateStatus = (status: number) => status >= 200 && status < 300;
 
 class ApiClient {
   private baseURL: string;
@@ -53,9 +82,7 @@ class ApiClient {
 
   constructor(config: ApiClientConfig = {}) {
     this.baseURL = config.baseURL ?? '';
-    this.defaultHeaders = config.headers ?? {
-      'Content-Type': 'application/json',
-    };
+    this.defaultHeaders = mergeHeaders(config.headers);
     this.timeout = config.timeout ?? 15000;
     this.credentials = config.credentials ?? 'include';
   }
@@ -101,29 +128,60 @@ class ApiClient {
     url: string,
     config: RequestConfig = {},
   ): Promise<T> {
-    let mergedConfig: RequestConfig & { url: string } = {
+    let mergedConfig: InternalConfig = {
       ...config,
       url,
-      headers: { ...this.defaultHeaders, ...config.headers },
+      headers: mergeHeaders(this.defaultHeaders, config.headers),
     };
 
     for (const interceptor of this.requestInterceptors) {
       mergedConfig = await interceptor(mergedConfig);
     }
 
-    const { params, data, url: finalUrl, credentials, ...rest } = mergedConfig;
+    const {
+      params,
+      data,
+      url: finalUrl,
+      credentials,
+      raw,
+      validateStatus,
+      signal: userSignal,
+      headers: finalHeaders,
+      ...rest
+    } = mergedConfig;
+
     const fullUrl = this.buildUrl(finalUrl, params);
 
+    // Body: raw bodies pass through, everything else is JSON.
+    // GET can't have a body, so `data` is ignored there instead of throwing.
+    const headers = new Headers(finalHeaders);
+    let body: BodyInit | undefined;
+    if (data !== undefined && method !== 'GET') {
+      if (isRawBody(data)) {
+        body = data; // fetch sets Content-Type (+ boundary for FormData)
+      } else {
+        body = JSON.stringify(data);
+        if (!headers.has('content-type')) {
+          headers.set('content-type', 'application/json');
+        }
+      }
+    }
+
+    // Timeout + optional caller signal, both respected.
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+    const signal = userSignal
+      ? AbortSignal.any([userSignal, controller.signal])
+      : controller.signal;
 
     try {
       let response = await fetch(fullUrl, {
         ...rest,
         method,
-        body: data !== undefined ? JSON.stringify(data) : undefined,
+        headers,
+        body,
         credentials: credentials ?? this.credentials,
-        signal: config.signal ?? controller.signal,
+        signal,
       });
 
       clearTimeout(timeoutId);
@@ -132,10 +190,13 @@ class ApiClient {
         response = await interceptor(response);
       }
 
-      if (!response.ok) {
+      const isOk = (validateStatus ?? defaultValidateStatus)(response.status);
+      if (!isOk) {
         const errorData = (await this.safeParse(response)) as AppError;
         throw new ApiError(response.status, response.statusText, errorData);
       }
+
+      if (raw) return response as T;
 
       if (response.status === 204) return undefined as T;
 

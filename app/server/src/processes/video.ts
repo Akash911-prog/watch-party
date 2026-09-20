@@ -42,6 +42,7 @@ export const getUploadUrlProcessYt = async (
                     "X-Upload-Content-Length": metadata.size
                         ? metadata.size.toString()
                         : "0",
+                    Origin: env.FRONTEND_URL,
                 },
                 body: JSON.stringify(metadataYt),
             },
@@ -58,6 +59,8 @@ export const getUploadUrlProcessYt = async (
 
     if (!res.ok) {
         const body = await res.text().catch(() => undefined);
+
+        console.log(body);
 
         switch (res.status) {
             case 401:
