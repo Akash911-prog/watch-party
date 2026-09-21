@@ -1,6 +1,6 @@
-import type { VideoMetadata } from "@watchparty/shared/types";
+import type { PostVideo, VideoMetadata } from "@watchparty/shared/types";
 import type { Request, Response } from "express";
-import { getUploadUrlProcess } from "../processes/video";
+import { createVideoProcess, getUploadUrlProcess } from "../processes/video";
 import { getAccessToken } from "../lib/yt-server";
 
 export async function getUploadUrl(req: Request, res: Response) {
@@ -16,4 +16,19 @@ export async function getUploadUrl(req: Request, res: Response) {
     }
 
     return res.status(200).json({ uploadUrl: resultReq.value });
+}
+
+export async function registerVideo(req: Request, res: Response) {
+    const body = req.body as PostVideo;
+    const user = req.user;
+    if (!user) {
+        return res
+            .status(401)
+            .json({ success: false, message: "Unauthorized" });
+    }
+    const result = await createVideoProcess(body, user);
+    if (!result.ok) {
+        return res.status(result.error.code).json(result.error);
+    }
+    return res.status(201).json(result.value);
 }

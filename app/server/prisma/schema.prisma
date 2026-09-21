@@ -37,7 +37,7 @@ model Video {
   uploadedBy String
   createdAt  DateTime @default(now())
   expiresAt  DateTime
-  rooms      Room?
+  rooms      Room[]
   user       User     @relation(fields: [uploadedBy], references: [id])
 
   @@index([expiresAt])

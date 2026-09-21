@@ -18,9 +18,14 @@ import {
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import type { VideoMetadata } from '@watchparty/shared/types';
+import type {
+  Video,
+  VideoMetadata,
+  VideoResource,
+} from '@watchparty/shared/types';
 import { api } from '@/lib/api-client';
 import { useVideoUpload } from '@/hooks/use-video-uploader';
+import { toast } from 'sonner';
 
 const currentUser = { letter: 'A' };
 
@@ -95,7 +100,9 @@ export default function UploadPage() {
   const [isDragActive, setIsDragActive] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [done, setDone] = useState<boolean>(false);
-  const { upload, progress, isUploading, error, cancel } = useVideoUpload();
+  const [video, setVideo] = useState<VideoResource | null>(null);
+  const { upload, progress, isUploading, error, cancel } =
+    useVideoUpload<VideoResource>();
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -186,12 +193,40 @@ export default function UploadPage() {
 
     // 2. send the bytes. The hook stores the error (and ignores user cancels)
     try {
-      await upload(uploadUrl, file);
+      const newVideo = await upload(uploadUrl, file);
+      setVideo(newVideo);
       setDone(true);
     } catch (e) {
       console.error(e);
     }
   };
+
+  useEffect(() => {
+    if (!done || !video) {
+      return;
+    }
+
+    if (done) {
+      setTimeout(() => {
+        handleRemoveFile();
+      }, 100);
+    }
+
+    async function registerVideo(video: VideoResource) {
+      try {
+        await api.post<Video>('/video/register', {
+          youtubeId: video.id,
+          title: video.snippet.title,
+        });
+        toast.success('Video uploaded successfully');
+      } catch (e) {
+        toast.error('Failed to upload video');
+        console.error(e);
+      }
+    }
+
+    registerVideo(video);
+  }, [done, handleRemoveFile, video]);
 
   return (
     <div className="dark min-h-screen w-full bg-background text-foreground">

@@ -1,7 +1,14 @@
 import { Err, Ok } from "@watchparty/shared/errors";
-import type { VideoMetadata, VideoMetadataYt } from "@watchparty/shared/types";
+import type {
+    PostVideo,
+    UserPayload,
+    VideoMetadata,
+    VideoMetadataYt,
+} from "@watchparty/shared/types";
 import { google } from "googleapis";
 import { env } from "../env";
+import { prisma } from "../prisma";
+import { Prisma } from "../generated/prisma/client";
 
 export const getUploadUrlProcess = async (
     accessToken: string,
@@ -120,4 +127,57 @@ export const getUploadUrlProcessYt = async (
     }
 
     return Ok(uploadUrl);
+};
+
+export const createVideoProcess = async (
+    video: PostVideo,
+    userPayload: UserPayload,
+) => {
+    try {
+        const newVideo = await prisma.video.create({
+            data: {
+                youtubeId: video.youtubeId,
+                title: video.title,
+                uploadedBy: userPayload.id,
+                expiresAt: new Date(Date.now() + 6 * 3600 * 1000), // 6 hours
+            },
+        });
+
+        if (!newVideo) {
+            return Err({
+                code: 500,
+                name: "InternalError",
+                message: "Failed to create video",
+                error: undefined,
+            });
+        }
+
+        return Ok(newVideo);
+    } catch (error) {
+        console.log(error);
+        if (error instanceof Prisma.PrismaClientKnownRequestError) {
+            switch (error.code) {
+                case "P2002":
+                    return Err({
+                        code: 409,
+                        name: "ConflictError",
+                        message: "Video already exists",
+                        error,
+                    });
+                default:
+                    return Err({
+                        code: 500,
+                        name: "InternalError",
+                        message: "Database error",
+                        error,
+                    });
+            }
+        }
+    }
+    return Err({
+        code: 500,
+        name: "InternalError",
+        message: "Unexpected error",
+        error: undefined,
+    });
 };

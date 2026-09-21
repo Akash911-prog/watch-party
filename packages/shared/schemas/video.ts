@@ -40,3 +40,65 @@ export const videoMetadataSchemaYt = z.object({
 });
 
 export const videoMetadataRequestSchema = requestSchema(videoMetadataSchema);
+
+export const createVideoSchema = z.object({
+    youtubeId: z.string(),
+    title: z.string(),
+});
+
+export const postVideoSchema = requestSchema(createVideoSchema);
+
+export const videoSchema = z.object({
+    id: z.string(),
+    youtubeId: z.string(),
+    title: z.string(),
+    createdAt: z.date(),
+    expiresAt: z.date().optional(),
+    uploadedBy: z.string(),
+    rooms: z.array(z.string()),
+});
+
+const Thumbnail = z.object({
+    url: z.url(),
+    width: z.number().int(),
+    height: z.number().int(),
+});
+
+export const videoResource = z.object({
+    kind: z.literal("youtube#video"),
+    etag: z.string(),
+    id: z.string(),
+    snippet: z.object({
+        publishedAt: z.date(),
+        channelId: z.string(),
+        channelTitle: z.string(),
+        title: z.string(),
+        description: z.string(),
+        categoryId: z.string(),
+        liveBroadcastContent: z.enum(["none", "upcoming", "live"]),
+        thumbnails: z.object({
+            default: Thumbnail,
+            medium: Thumbnail,
+            high: Thumbnail,
+            standard: Thumbnail.optional(),
+            maxres: Thumbnail.optional(),
+        }),
+        localized: z.object({
+            title: z.string(),
+            description: z.string(),
+        }),
+    }),
+    status: z.object({
+        uploadStatus: z.enum([
+            "uploaded",
+            "processed",
+            "failed",
+            "rejected",
+            "deleted",
+        ]),
+        privacyStatus: z.enum(["public", "unlisted", "private"]),
+        license: z.enum(["youtube", "creativeCommon"]),
+        embeddable: z.boolean(),
+        publicStatsViewable: z.boolean(),
+    }),
+});

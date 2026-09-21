@@ -16,7 +16,7 @@ export async function uploadVideo<T = unknown>(
     timeout: 10 * 60_000,
   });
 
-  const CHUNK = 10 * 1024 * 1024; // multiple of 256 KiB
+  const CHUNK = 2 * 1024 * 1024; // multiple of 256 KiB
   const size = file.size;
 
   let start = 0;
