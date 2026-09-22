@@ -9,6 +9,7 @@ import cookieParser from "cookie-parser";
 import videoRouter from "./routes/video";
 import { idAttach } from "./middleware/idAttach";
 import { consoleLogger } from "./middleware/logger";
+import roomRouter from "./routes/room";
 
 const app: Express = express();
 const port = env.PORT;
@@ -43,6 +44,7 @@ app.use(consoleLogger);
 app.use("/user", userRouter);
 app.use("/auth", authRouter);
 app.use("/video", videoRouter);
+app.use("/room", roomRouter);
 
 app.listen(port, () => {
     console.log(` ✅ server started in ${env.NODE_ENV} mode on port ${port}`);

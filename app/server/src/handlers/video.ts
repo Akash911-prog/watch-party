@@ -48,5 +48,5 @@ export async function getAllVideos(req: Request, res: Response) {
     if (!result.ok) {
         return res.status(result.error.code).json(result.error);
     }
-    return res.status(201).json(result.value);
+    return res.status(200).json(result.value);
 }

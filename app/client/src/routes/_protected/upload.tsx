@@ -166,6 +166,7 @@ function UploadRouteComponent() {
         handleRemoveFile();
       }, 100);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [done, handleRemoveFile, video, file]);
 
   return (

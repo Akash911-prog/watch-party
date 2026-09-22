@@ -17,8 +17,6 @@ videoRouter.post("/register", validate(postVideoSchema), registerVideo);
 
 videoRouter.delete("/", (req, res) => {});
 
-videoRouter.put("/", (req, res) => {});
-
 videoRouter.post("/upload", validate(videoMetadataRequestSchema), getUploadUrl);
 
 export default videoRouter;
