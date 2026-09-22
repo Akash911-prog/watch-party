@@ -66,10 +66,27 @@ function UploadRouteComponent() {
   }, [isUploading]);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files[0]) {
-      handleSelectedFile(e.target.files[0]);
-    }
+    const selected = e.target.files?.[0];
+    if (!selected) return;
+    handleSelectedFile(selected);
   };
+
+  function getVideoDuration(file: File): Promise<number> {
+    return new Promise((resolve, reject) => {
+      const url = URL.createObjectURL(file);
+      const v = document.createElement('video');
+      v.preload = 'metadata';
+      v.onloadedmetadata = () => {
+        URL.revokeObjectURL(url);
+        resolve(v.duration);
+      };
+      v.onerror = () => {
+        URL.revokeObjectURL(url);
+        reject(new Error('Could not read video metadata'));
+      };
+      v.src = url;
+    });
+  }
 
   const onButtonClick = () => {
     if (isUploading) return;
@@ -112,21 +129,17 @@ function UploadRouteComponent() {
   };
 
   useEffect(() => {
-    if (!done || !video) {
+    if (!done || !video || !file) {
       return;
     }
 
-    if (done) {
-      setTimeout(() => {
-        handleRemoveFile();
-      }, 100);
-    }
-
-    async function registerVideo(uploadedVideo: VideoResource) {
+    async function registerVideo(uploadedVideo: VideoResource, file: File) {
       try {
+        const duration = await getVideoDuration(file);
         await api.post<Video>('/video/register', {
           youtubeId: uploadedVideo.id,
           title: uploadedVideo.snippet.title,
+          duration: duration,
         });
         toast.success('Video uploaded successfully');
       } catch (e) {
@@ -135,8 +148,14 @@ function UploadRouteComponent() {
       }
     }
 
-    registerVideo(video);
-  }, [done, handleRemoveFile, video]);
+    registerVideo(video, file);
+
+    if (done) {
+      setTimeout(() => {
+        handleRemoveFile();
+      }, 100);
+    }
+  }, [done, handleRemoveFile, video, file]);
 
   return (
     <div className="dark min-h-screen w-full bg-background text-foreground">

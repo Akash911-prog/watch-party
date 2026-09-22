@@ -44,6 +44,7 @@ export const videoMetadataRequestSchema = requestSchema(videoMetadataSchema);
 export const createVideoSchema = z.object({
     youtubeId: z.string(),
     title: z.string(),
+    duration: z.number().default(0).optional(),
 });
 
 export const postVideoSchema = requestSchema(createVideoSchema);

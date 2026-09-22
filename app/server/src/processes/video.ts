@@ -140,6 +140,7 @@ export const createVideoProcess = async (
                 title: video.title,
                 uploadedBy: userPayload.id,
                 expiresAt: new Date(Date.now() + 6 * 3600 * 1000), // 6 hours
+                duration: video.duration,
             },
         });
 
