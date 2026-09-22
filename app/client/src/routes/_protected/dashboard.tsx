@@ -6,6 +6,7 @@ import {
 } from '@/components/dashboard';
 import { queryOptions, useSuspenseQuery } from '@tanstack/react-query';
 import { fetchVideos } from '@/lib/queryFunctions/videoFetch';
+import { RouteErrorFallback } from '@/components/common/route-error-fallback';
 
 const videosQueryOptions = queryOptions({
   queryKey: ['video'],
@@ -16,11 +17,12 @@ export const Route = createFileRoute('/_protected/dashboard')({
   loader: ({ context: { queryClient } }) => {
     queryClient.ensureQueryData(videosQueryOptions);
   },
+  errorComponent: RouteErrorFallback,
   component: DashboardPage,
 });
 
 function DashboardPage() {
-  const { data: videos } = useSuspenseQuery(videosQueryOptions);
+  const { data: _videos } = useSuspenseQuery(videosQueryOptions);
 
   return (
     <div className="dark min-h-screen w-full bg-background text-foreground">

@@ -1,6 +1,7 @@
 import { AppSidebar } from '@/components/sidebar';
 import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { createFileRoute, Outlet } from '@tanstack/react-router';
+import { RouteErrorFallback } from '@/components/common/route-error-fallback';
 
 export const Route = createFileRoute('/_protected')({
   beforeLoad: ({ context }) => {
@@ -10,6 +11,7 @@ export const Route = createFileRoute('/_protected')({
         search: { redirect: location.href },
       });
   },
+  errorComponent: RouteErrorFallback,
   component: RouteComponent,
 });
 

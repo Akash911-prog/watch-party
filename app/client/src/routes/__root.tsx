@@ -7,10 +7,12 @@ import Lenis from 'lenis';
 import { useEffect } from 'react';
 
 import { TooltipProvider } from '@/components/ui/tooltip';
+import { RootErrorPage } from '@/components/common/root-error-page';
 
 // this is like the layout.tsx file of Nextjs
 
 export const Route = createRootRouteWithContext<RouterContext>()({
+  errorComponent: RootErrorPage,
   component: RootComponent,
 });
 

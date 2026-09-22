@@ -2,6 +2,7 @@ import { QueryClient } from '@tanstack/react-query';
 import { createRouter } from '@tanstack/react-router';
 import { routeTree } from './routeTree.gen';
 import { NotFoundPage } from './components/NotFound';
+import { RootErrorPage } from './components/common/root-error-page';
 import type { User } from '@watchparty/shared/types';
 import { api } from './lib/api-client';
 import { useAuthStore } from './hooks/useAuth';
@@ -27,6 +28,7 @@ export async function getRouter() {
     routeTree,
     context: { queryClient, user: null, isAuthenticated: false },
     defaultNotFoundComponent: NotFoundPage,
+    defaultErrorComponent: RootErrorPage,
   });
 
   try {
