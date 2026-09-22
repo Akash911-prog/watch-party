@@ -6,37 +6,37 @@ import type { LibraryVideo } from './types';
 const defaultLibrary: LibraryVideo[] = [
   {
     title: 'Static Bloom',
-    duration: '42 min',
+    duration: 60,
     tone: '#3B2E4A',
     expiresInMin: 41,
   },
   {
     title: 'Midnight Frequency',
-    duration: '1h 12m',
     tone: '#2E3B47',
+    duration: 1000,
     expiresInMin: 138,
   },
   {
     title: 'Paper Moons',
-    duration: '58 min',
+    duration: 237582,
     tone: '#47332E',
     expiresInMin: 312,
   },
   {
     title: 'The Last Reel',
-    duration: '1h 34m',
+    duration: 23087823,
     tone: '#2E4739',
     expiresInMin: 205,
   },
   {
     title: 'Low Tide Station',
-    duration: '51 min',
+    duration: 121623879,
     tone: '#4A2E3F',
     expiresInMin: 356,
   },
   {
     title: 'Amber & Ash',
-    duration: '1h 05m',
+    duration: 348477,
     tone: '#3F4A2E',
     expiresInMin: 12,
   },
@@ -95,7 +95,7 @@ export function VideoCard({ video, isHovered, onHover }: VideoCardProps) {
         <p className="truncate text-sm font-medium">{video.title}</p>
         <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
           <Play className="h-3 w-3" strokeWidth={1.5} fill="currentColor" />
-          {video.duration} runtime
+          {formatExpiry(video.duration)} runtime
         </div>
       </div>
     </div>

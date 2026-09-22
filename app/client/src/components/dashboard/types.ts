@@ -1,6 +1,6 @@
 export interface LibraryVideo {
   title: string;
-  duration: string;
+  duration: number;
   tone: string;
   expiresInMin: number;
 }
