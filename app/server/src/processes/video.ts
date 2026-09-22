@@ -182,3 +182,22 @@ export const createVideoProcess = async (
         error: undefined,
     });
 };
+
+export const getAllVideoProcess = async (user: UserPayload) => {
+    try {
+        const videos = await prisma.video.findMany({
+            where: {
+                uploadedBy: user.id,
+            },
+        });
+        return Ok(videos);
+    } catch (error) {
+        console.log(error);
+        return Err({
+            code: 500,
+            name: "InternalError",
+            message: "Failed to get videos",
+            error,
+        });
+    }
+};

@@ -23,12 +23,15 @@ import type {
 import { api } from '@/lib/api-client';
 import { useVideoUpload } from '@/hooks/use-video-uploader';
 import { toast } from 'sonner';
+import { ApiError } from '@/lib/api-client/api-client';
 
 export const Route = createFileRoute('/_protected/upload')({
   component: UploadRouteComponent,
 });
 
 function UploadRouteComponent() {
+  const { queryClient } = Route.useRouteContext();
+
   const [ticked, setTicked] = useState<boolean>(false);
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState<string>('');
@@ -113,6 +116,11 @@ function UploadRouteComponent() {
         metadata,
       ));
     } catch (e) {
+      if (e instanceof ApiError) {
+        console.error(e.data);
+        setErrorMessage('Could not start the upload. Please try again.');
+        return;
+      }
       console.error(e);
       setErrorMessage('Could not start the upload. Please try again.');
       return;
@@ -141,10 +149,13 @@ function UploadRouteComponent() {
           title: uploadedVideo.snippet.title,
           duration: duration,
         });
+        queryClient.invalidateQueries(['video']);
         toast.success('Video uploaded successfully');
       } catch (e) {
-        toast.error('Failed to upload video');
-        console.error(e);
+        if (e instanceof ApiError) {
+          toast.error(e.data?.message);
+          console.error(e.data);
+        }
       }
     }
 

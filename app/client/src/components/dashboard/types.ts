@@ -1,4 +1,5 @@
 export interface LibraryVideo {
+  id: string;
   title: string;
   duration: number;
   tone: string;

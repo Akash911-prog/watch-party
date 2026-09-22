@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUploadUrl, registerVideo } from "../handlers/video";
+import { getAllVideos, getUploadUrl, registerVideo } from "../handlers/video";
 import { authenticate } from "../middleware/authenticate";
 import {
     postVideoSchema,
@@ -11,7 +11,7 @@ const videoRouter = Router();
 
 videoRouter.use(authenticate);
 
-videoRouter.get("/", (req, res) => {});
+videoRouter.get("/", getAllVideos);
 
 videoRouter.post("/register", validate(postVideoSchema), registerVideo);
 

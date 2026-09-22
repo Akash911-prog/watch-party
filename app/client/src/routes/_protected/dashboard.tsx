@@ -11,6 +11,7 @@ import { RouteErrorFallback } from '@/components/common/route-error-fallback';
 const videosQueryOptions = queryOptions({
   queryKey: ['video'],
   queryFn: () => fetchVideos(),
+  staleTime: 5 * 60 * 1000,
 });
 
 export const Route = createFileRoute('/_protected/dashboard')({
@@ -22,14 +23,16 @@ export const Route = createFileRoute('/_protected/dashboard')({
 });
 
 function DashboardPage() {
-  const { data: _videos } = useSuspenseQuery(videosQueryOptions);
+  const { data: videos } = useSuspenseQuery(videosQueryOptions);
+
+  console.log(videos);
 
   return (
     <div className="dark min-h-screen w-full bg-background text-foreground">
       <div className="mx-auto px-6 py-8">
         <DashboardHero />
         <ActiveRooms />
-        <VideoLibrary />
+        <VideoLibrary videos={videos} />
       </div>
     </div>
   );

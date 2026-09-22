@@ -1,40 +1,47 @@
 import { useState } from 'react';
-import { Play, Timer } from 'lucide-react';
+import { Play, Timer, Upload } from 'lucide-react';
 import { Sprockets } from '@/components/common/sprockets';
 import type { LibraryVideo } from './types';
+import { Link } from '@tanstack/react-router';
 
 const defaultLibrary: LibraryVideo[] = [
   {
+    id: '1',
     title: 'Static Bloom',
     duration: 60,
     tone: '#3B2E4A',
     expiresInMin: 41,
   },
   {
+    id: '2',
     title: 'Midnight Frequency',
     tone: '#2E3B47',
     duration: 1000,
     expiresInMin: 138,
   },
   {
+    id: '3',
     title: 'Paper Moons',
     duration: 237582,
     tone: '#47332E',
     expiresInMin: 312,
   },
   {
+    id: '4',
     title: 'The Last Reel',
     duration: 23087823,
     tone: '#2E4739',
     expiresInMin: 205,
   },
   {
+    id: '5',
     title: 'Low Tide Station',
     duration: 121623879,
     tone: '#4A2E3F',
     expiresInMin: 356,
   },
   {
+    id: '6',
     title: 'Amber & Ash',
     duration: 348477,
     tone: '#3F4A2E',
@@ -47,6 +54,14 @@ function formatExpiry(min: number) {
   const m = min % 60;
   if (h === 0) return `${m}m`;
   return `${h}h ${m}m`;
+}
+
+function formatDuration(sec: number) {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = Math.floor(sec % 60);
+  if (h === 0) return `${m}m ${s}s`;
+  return `${h}h ${m}m ${s}s`;
 }
 
 interface VideoCardProps {
@@ -95,7 +110,7 @@ export function VideoCard({ video, isHovered, onHover }: VideoCardProps) {
         <p className="truncate text-sm font-medium">{video.title}</p>
         <div className="mt-1 flex items-center gap-1.5 text-xs text-muted-foreground">
           <Play className="h-3 w-3" strokeWidth={1.5} fill="currentColor" />
-          {formatExpiry(video.duration)} runtime
+          {formatDuration(video.duration)} runtime
         </div>
       </div>
     </div>
@@ -120,10 +135,25 @@ export function VideoLibrary({ videos = defaultLibrary }: VideoLibraryProps) {
         </span>
       </div>
 
+      {videos.length === 0 && (
+        <div className="flex flex-col items-center justify-center gap-2 rounded-md px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:opacity-90 active:translate-y-2">
+          <p className="text-sm text-muted-foreground">
+            You haven&apos;t uploaded any videos yet.
+          </p>
+          <Link
+            to="/upload"
+            className="flex cursor-pointer items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-all duration-300 hover:translate-y-0.5 hover:opacity-90 active:translate-y-2"
+          >
+            <Upload className="h-4 w-4" strokeWidth={2} />
+            Upload a video
+          </Link>
+        </div>
+      )}
+
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {videos.map((video) => (
           <VideoCard
-            key={video.title}
+            key={video.id}
             video={video}
             isHovered={hovered === video.title}
             onHover={setHovered}

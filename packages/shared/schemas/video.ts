@@ -53,6 +53,7 @@ export const videoSchema = z.object({
     id: z.string(),
     youtubeId: z.string(),
     title: z.string(),
+    duration: z.number().default(0),
     createdAt: z.date(),
     expiresAt: z.date().optional(),
     uploadedBy: z.string(),
